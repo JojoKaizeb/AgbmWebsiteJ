@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Agbm Shield Gate II</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Segoe UI", sans-serif;
+      background: #000;
+      color: white;
+      overflow: hidden;
+    }
+
+    .glow-title {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 2rem;
+      color: #fff;
+      text-shadow: 0 0 10px #0ff, 0 0 20px #0ff;
+    }
+
+    .verify-box {
+      position: relative;
+      max-width: 90%;
+      width: 400px;
+      margin: 50px auto;
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid #0ff;
+      padding: 30px;
+      border-radius: 12px;
+      z-index: 2;
+    }
+
+    .verify-box label {
+      font-size: 1.2rem;
+    }
+
+    .verify-box input[type="checkbox"] {
+      transform: scale(1.5);
+      margin-right: 10px;
+    }
+
+    .verify-box button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 12px;
+      background: #0ff;
+      color: #000;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .bg-floating {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .bg-floating span {
+      position: absolute;
+      color: rgba(255, 255, 255, 0.06);
+      font-size: 2rem;
+      animation: float 18s linear infinite;
+      user-select: none;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(100vh) translateX(0);
+        opacity: 0;
+      }
+      50% {
+        opacity: 0.3;
+      }
+      100% {
+        transform: translateY(-100vh) translateX(50px);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="glow-title">Agbm Shield Gate II</div>
+
+  <div class="verify-box">
+    <label>
+      <input type="checkbox" id="check" />
+      Final step before entering core site
+    </label>
+    <button onclick="verify()">Unlock Access</button>
+  </div>
+
+  <div class="bg-floating" id="emoji-bg"></div>
+
+  <script>
+    const emojis = ["💀", "🔥", "🛡️", "☮️", "⚠️", "📡", "🧿", "🕊️"];
+    const container = document.getElementById("emoji-bg");
+
+    for (let i = 0; i < 70; i++) {
+      const span = document.createElement("span");
+      span.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      span.style.left = Math.random() * 100 + "vw";
+      span.style.top = Math.random() * 100 + "vh";
+      span.style.animationDuration = 12 + Math.random() * 20 + "s";
+      container.appendChild(span);
+    }
+
+    function verify() {
+      const check = document.getElementById("check");
+      if (check.checked) {
+        window.location.href = "core.html"; // Ganti ke halaman utama kamu
+      } else {
+        alert("Please verify yourself.");
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <-- Peek Again, We Dare You. -->
+    <link rel="icon"
+    href="https://files.catbox.moe/aaqb6.jpg" type="image/jpeg">
+  <link rel="stylesheet"
+  href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Agbm.Id Website</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@600;700&display=swap');
+
+    /* Reset & base */
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      padding: 24px;
+      min-height: 100vh;
+      font-family: 'Inter', sans-serif;
+      background: #f9fafb;
+      color: #1f2937;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 32px;
+      flex-direction: column;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      position: relative;
+      overflow-x: hidden;
+    }
+    button {
+      background: linear-gradient(135deg, #4ade80, #22c55e);
+      color: white;
+      border: none;
+      padding: 14px 32px;
+      font-size: 1.125rem;
+      font-weight: 600;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 6px 12px rgb(34 197 94 / 0.4);
+      transition: background 0.3s ease, transform 0.2s ease;
+      min-width: 220px;
+      user-select: none;
+    }
+    button:hover,
+    button:focus {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      outline: none;
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgb(34 197 94 / 0.6);
+    }
+    button:active {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 12px rgb(34 197 94 / 0.5);
+    }
+
+    /* Dark mode styles */
+    body.dark-mode {
+      background: #111827;
+      color: #d1d5db;
+    }
+    body.dark-mode button {
+      background: linear-gradient(135deg, #22c55e, #4ade80);
+      color: #111827;
+      box-shadow: 0 6px 12px rgb(72 187 120 / 0.6);
+    }
+    body.dark-mode button:hover,
+    body.dark-mode button:focus {
+      background: linear-gradient(135deg, #16a34a, #22c55e);
+      color: #f3f4f6;
+      box-shadow: 0 10px 20px rgb(72 187 120 / 0.9);
+      transform: translateY(-3px);
+      outline: none;
+    }
+
+    /* Shared Heading */
+    h1 {
+      margin: 0;
+      text-align: center;
+      cursor: default;
+    }
+
+    /* Animations */
+    @keyframes fadeInMove {
+      0% {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes glow {
+      0% {
+        text-shadow:
+          0 0 4px #34d399,
+          0 0 10px #34d399,
+          0 0 20px #34d399,
+          0 0 30px #34d399,
+          0 0 40px #10b981,
+          0 0 60px #10b981,
+          0 0 80px #10b981;
+        color: #6ee7b7;
+      }
+      100% {
+        text-shadow:
+          0 0 8px #a7f3d0,
+          0 0 14px #a7f3d0,
+          0 0 24px #a7f3d0,
+          0 0 34px #34d399,
+          0 0 44px #34d399,
+          0 0 64px #22c55e,
+          0 0 84px #22c55e;
+        color: #d1fae5;
+      }
+    }
+
+    /* Home page styles */
+    #home-page {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+      max-width: 600px;
+      width: 100%;
+    }
+    #home-page h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      animation: fadeInMove 2s ease-in-out infinite alternate;
+    }
+    #home-page .buttons-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      justify-content: center;
+      width: 100%;
+    }
+
+    /* Sejarah page styles */
+    #sejarah-page {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+      background: #111827;
+      color: #ffffff;
+      padding: 32px 24px;
+      border-radius: 16px;
+      max-width: 700px;
+      width: 100%;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      text-align: center;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    #sejarah-page.active {
+      display: flex;
+    }
+    body:not(.dark-mode) #sejarah-page {
+      background: #111827;
+      color: #ffffff;
+    }
+    body.dark-mode #sejarah-page {
+      background: #1f2937;
+      color: #d1d5db;
+    }
+    #sejarah-page h1 {
+      font-size: 3.5rem;
+      font-weight: 700;
+      animation: glow 2.5s infinite ease-in-out alternate;
+      user-select: none;
+    }
+    
+    #sejarah-description {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #d1d5db;
+      user-select: text;
+      max-width: 500px;
+      margin: 0 auto;
+      white-space: pre-wrap;
+      text-align: left;
+      transition: color 0.3s ease;
+      max-height: 300px;
+      overflow-y: auto;
+      padding-right: 10px;
+    }
+    
+    body:not(.dark-mode) 
+    #sejarah-description {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #d1d5db;
+      user-select: text;
+      max-width: 500px;
+      margin: 0 auto;
+      white-space: pre-wrap;
+      text-align: left;
+      transition: color 0.3s ease;
+      max-height: 300px;
+      overflow-y: auto;
+      padding-right: 10px;
+    }
+    
+    body.dark-mode 
+    #sejarah-description {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #d1d5db;
+      user-select: text;
+      max-width: 500px;
+      margin: 0 auto;
+      white-space: pre-wrap;
+      text-align: left;
+      transition: color 0.3s ease;
+      max-height: 300px;
+      overflow-y: auto;
+      padding-right: 10px;
+    }
+    
+    #sejarah-page button {
+      background: #374151;
+      box-shadow: none;
+      color: #d1d5db;
+      border-radius: 8px;
+      min-width: 120px;
+      font-weight: 600;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    #sejarah-page button:hover,
+    #sejarah-page button:focus {
+      background: #4b5563;
+      color: #f3f4f6;
+      outline: none;
+    }
+    body.dark-mode #sejarah-page button {
+      background: #4b5563;
+      color: #e0e7ff;
+    }
+    body.dark-mode #sejarah-page button:hover,
+    body.dark-mode #sejarah-page button:focus {
+      background: #6b7280;
+      color: #f3f4f6;
+    }
+
+    /* Top Video page styles */
+    #top-video-page {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+      background: #111827;
+      color: #ffffff;
+      padding: 32px 24px;
+      border-radius: 16px;
+      max-width: 700px;
+      width: 100%;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      text-align: center;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    #top-video-page.active {
+      display: flex;
+    }
+    body:not(.dark-mode) #top-video-page {
+      background: #111827;
+      color: #ffffff;
+    }
+    body.dark-mode #top-video-page {
+      background: #1f2937;
+      color: #d1d5db;
+    }
+    #top-video-page h1 {
+      font-size: 3.5rem;
+      font-weight: 700;
+      animation: glow 2.5s infinite ease-in-out alternate;
+      user-select: none;
+    }
+    .video-columns {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      width: 100%;
+      max-width: 720px;
+    }
+    .video-column {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      width: 220px;
+    }
+    .video-column video,
+    .video-column iframe {
+      width: 100%;
+      height: 140px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      background: black;
+    }
+    .video-description {
+      font-size: 1rem;
+      color: #d1d5db;
+      user-select: none;
+      text-align: center;
+    }
+    .video-controls {
+      display: flex;
+      gap: 12px;
+      margin-top: 4px;
+    }
+    .video-controls button {
+      background: #22c55e;
+      padding: 6px 14px;
+      font-size: 0.9rem;
+      min-width: auto;
+      border-radius: 8px;
+      font-weight: 600;
+      box-shadow: 0 4px 8px rgb(34 197 94 / 0.5);
+      transition: background 0.3s ease;
+      cursor: pointer;
+      user-select: none;
+    }
+    .video-controls button:hover,
+    .video-controls button:focus {
+      background: #16a34a;
+      outline: none;
+    }
+    #top-video-page button.back-btn {
+      background: #374151;
+      box-shadow: none;
+      color: #d1d5db;
+      min-width: 120px;
+      padding: 10px 24px;
+      cursor: pointer;
+      font-weight: 600;
+      border-radius: 8px;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      margin-top: 20px;
+    }
+    #top-video-page button.back-btn:hover,
+    #top-video-page button.back-btn:focus {
+      background: #4b5563;
+      color: #f3f4f6;
+      outline: none;
+    }
+    body.dark-mode #top-video-page button.back-btn {
+      background: #4b5563;
+      color: #e0e7ff;
+    }
+    body.dark-mode #top-video-page button.back-btn:hover,
+    body.dark-mode #top-video-page button.back-btn:focus {
+      background: #6b7280;
+      color: #f3f4f6;
+    }
+
+    /* Text copyright menu */
+    #copyright-text {
+      font-size: 0.875rem;
+      color: #666f85;
+      user-select: none;
+      max-width: 600px;
+      text-align: center;
+      margin-top: 16px;
+      padding: 8px 12px;
+      background: #e0f2fe;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(34 197 94 / 0.2);
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    body.dark-mode #copyright-text {
+      background: #374151;
+      color: #d1d5db;
+      box-shadow: 0 2px 8px rgba(72 187 120 / 0.5);
+    }
+
+    /* Dark mode toggle button in top right corner */
+    #toggle-theme-btn {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      min-width: 44px;
+      min-height: 44px;
+      padding: 0;
+      font-size: 24px;
+      line-height: 1;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #4ade80, #22c55e);
+      color: white;
+      box-shadow: 0 6px 12px rgb(34 197 94 / 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.3s ease, color 0.3s ease, transform 0.2s ease;
+      border: none;
+      z-index: 1100;
+    }
+    #toggle-theme-btn:hover,
+    #toggle-theme-btn:focus {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: white;
+      transform: translateY(-2px);
+      outline: none;
+      box-shadow: 0 10px 20px rgb(34 197 94 / 0.8);
+    }
+    #toggle-theme-btn:active {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 12px rgb(34 197 94 / 0.6);
+    }
+    body.dark-mode #toggle-theme-btn {
+      background: linear-gradient(135deg, #22c55e, #4ade80);
+      color: #111827;
+      box-shadow: 0 6px 12px rgb(72 187 120 / 0.7);
+    }
+    body.dark-mode #toggle-theme-btn:hover,
+    body.dark-mode #toggle-theme-btn:focus {
+      background: linear-gradient(135deg, #16a34a, #22c55e);
+      color: #f3f4f6;
+      box-shadow: 0 10px 20px rgb(72 187 120 / 0.95);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 480px) {
+      #toggle-theme-btn {
+        top: 12px;
+        right: 12px;
+        font-size: 20px;
+        min-width: 40px;
+        min-height: 40px;
+      }
+      button {
+        min-width: 140px;
+        padding: 12px 20px;
+        font-size: 1rem;
+      }
+      #home-page h1 {
+        font-size: 2.25rem;
+      }
+      #sejarah-page h1 {
+        font-size: 2.75rem;
+      }
+      
+    #sejarah-description {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #d1d5db;
+      user-select: text;
+      max-width: 500px;
+      margin: 0 auto;
+      white-space: pre-wrap;
+      text-align: left;
+      transition: color 0.3s ease;
+      max-height: 300px;
+      overflow-y: auto;
+      padding-right: 10px;
+    }
+    
+      #home-page .buttons-row {
+        flex-direction: column;
+        gap: 12px;
+      }
+      .video-columns {
+        flex-direction: column;
+        align-items: center;
+      }
+      .video-column {
+        width: 100% !important;
+        max-width: none !important;
+      }
+    }
+
+    /* BUTTON GITHUB SIGN IN at top-left corner */
+    #github-signin-btn {
+      position: fixed;
+      top: 16px;
+      left: 16px;
+      padding: 6px 12px;
+      font-size: 1.25rem;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #333333, #24292e);
+      color: #ffffff;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.4);
+      transition: background 0.3s ease, transform 0.15s ease;
+      user-select: none;
+      z-index: 1200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 44px;
+      min-height: 44px;
+      line-height: 1;
+    }
+    #github-signin-btn:hover,
+    #github-signin-btn:focus {
+      background: linear-gradient(135deg, #24292e, #000000);
+      outline: none;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.6);
+    }
+    #github-signin-btn:active {
+      transform: translateY(-1px);
+      box-shadow: 0 3px 6px rgba(0,0,0,0.5);
+    }
+
+  </style>
+</head>
+<script>
+  //Auto Set Tema Gelap/terang
+  const hour = new Date().getHours();
+  const zone =
+  document.querySelector('#ritual-zone');
+  if (zone) {
+    zone.classList.remove('dark', 'light');
+    zone.classList.add((hour >= 18 || hour <= 6) ? 'dark' : 'light');
+  }
+  //Aurora Yang Ngikut cursor
+  const aurora =
+  document.createElement('div');
+  aurora.id = 'aurora';
+  document.body.appendChild(aurora);
+  
+  window.addEventListener('mousemove'), (e) => {
+    aurora.style.setProperty('--x',
+    e.clientX + 'px');
+    aurora.style.setProperty('--y',
+    e.clientY + 'px');
+  });
+  //Trigger Mode God Babymetal
+  document.addEventListener('keydown', (e)
+  => {
+    const now = new Date();
+    const hour = now.getHours();
+    const isLaptop=!/Android|webOs|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    if (e.key.toLowerCase() === 'x' && hour === 3 && isLaptop) {
+      zone.classList.add('god-mode');
+      console.log("GODBABYMETAL MODE ACTIVATED🔥"");
+    }
+  });
+  
+  //Auto Non-Aktif Jam 3:59:59 
+  setInterval(() => {
+    const now = new Date();
+    if (now.getHours() === 3 &&
+    now.getMinutes() >= 59) {
+      zone.classList.remove('god-mode');
+      console.log("GODBABYMETAL MODE OFF❌");
+    }
+  }, 60000);
+  
+    }
+  }
+    }
+  }
+  }
+</script>
+<body>
+  <main>
+
+    <!-- BUTTON GITHUB SIGNIN -->
+    <button id="github-signin-btn" aria-label="Masuk dengan Github" title="Masuk dengan Github">👨‍💻</button>
+
+    <!-- Home Page -->
+    <section id="home-page" role="region" aria-label="Halaman Beranda">
+      <img src="https://files.catbox.moe/a2ym1f.jpg" alt="Logo Agbm" style="width: 120px; height: auto; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.2);" />
+      <h1>Selamat datang di Agbm.Id Website</h1>
+      <div class="buttons-row">
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; margin-top: 16px;">
+          <div id="clock" style="font-size: 1.5rem; font-weight: bold; color: #10b981;"></div>
+          <select id="timezone-select" style="padding: 8px 12px; border-radius: 8px; border: 1px solid #ccc; font-size: 1rem;">
+            <option value="WIB" selected>WIB (GMT+7)</option>
+            <option value="WITA">WITA (GMT+8)</option>
+            <option value="WIT">WIT (GMT+9)</option>
+          </select>
+        </div>
+
+        <button id="music-btn" type="button" aria-label="Buka halaman lagu favorit">Favorite Music</button>
+        <button id="form-btn" type="button" aria-label="Buka halaman Form Pendaftaran">Form Pendaftaran</button>
+        <button id="sejarah-btn" type="button" aria-label="Buka halaman sejarah berdirinya">Sejarah Berdirinya</button>
+        <button id="top-videos-btn" type="button" aria-label="Buka halaman top videos">Top Videos of the Last 1 Month</button>
+      </div>
+
+      <div id="copyright-text" aria-live="polite" aria-atomic="true" role="contentinfo" tabindex="-1">
+        Website Ini Memiliki Hak Cipta, Jadi Jangan Mengambil Kode Script Nya.
+      </div>
+      <div id="anniversary-summary" style="margin-top: 12px; font-size: 1rem; color: #10b981; font-weight: 600;">
+        Anniversary: <span id="anniversary-count" style="font-size: 2.5rem; font-weight: bold;">1</span>
+      </div>
+
+    </section>
+
+    <!-- Halaman Sejarah  -->
+    <section id="sejarah-page" role="region" aria-label="Halaman Sejarah Berdirinya Squad" class="hidden">
+      <h1>Sejarah Berdirinya Squad</h1>
+      <div style="font-size: 0.9rem; color: #9ca3af; text-align: center;">Geser ke bawah untuk membaca seluruh sejarah 👇</div>
+      <p id="sejarah-description">
+        Squad Ini Terbentuk Karena Kejadian Yang Tidak Disengaja Dimana Ada 2 Orang Yang Sedang Iseng Membuat Squad, Mereka Berdua Sedang Memikirkan Nama Untuk Squad Tersebut Mereka Berdua Pun Memiliki Beberapa Opsi Untuk Nama Tersebut, Ada "XBMC" atau XBabymetal Clan dan juga ada "FBMC" Atau Fans Babymetal Clan Dan ada Juga "JBM" Atau Japannese Babymetal Dan Terakhir Ada "AGBM" Atau A God Babymetal Yang Sekarang Menjadi Nama Resmi Dari Squad Ini Sekarang
+      </p>
+      <button id="back-btn" type="button" aria-label="Kembali ke halaman utama">Kembali</button>
+    </section>
+
+    <!-- Halaman Top Video -->
+    <section id="top-video-page" role="region" aria-label="Halaman Top Videos of the Last 1 Month" class="hidden">
+      <h1>Top Videos of the Last 1 Month</h1>
+      <div class="video-columns">
+        <div class="video-column" data-index="0">
+          <video src="https://files.catbox.moe/your_video1.mp4" controls preload="metadata" width="100%" height="140"></video>
+          <div class="video-description">Top One🥇</div>
+          <div class="video-controls">
+            <button class="play-pause-btn" aria-label="Putar video Top One">Play</button>
+            <button class="mute-unmute-btn" aria-label="Bisukan video Top One">Mute</button>
+          </div>
+        </div>
+        <div class="video-column" data-index="1">
+          <video src="https://files.catbox.moe/your_video2.mp4" controls preload="metadata" width="100%" height="140"></video>
+          <div class="video-description">Top Two🥈</div>
+          <div class="video-controls">
+            <button class="play-pause-btn" aria-label="Putar video Top Two">Play</button>
+            <button class="mute-unmute-btn" aria-label="Bisukan video Top Two">Mute</button>
+          </div>
+        </div>
+        <div class="video-column" data-index="2">
+          <video src="https://files.catbox.moe/your_video3.mp4" controls preload="metadata" width="100%" height="140"></video>
+          <div class="video-description">Top Three🥉</div>
+          <div class="video-controls">
+            <button class="play-pause-btn" aria-label="Putar video Top Three">Play</button>
+            <button class="mute-unmute-btn" aria-label="Bisukan video Top Three">Mute</button>
+          </div>
+        </div>
+      </div>
+      <button id="top-video-back-btn" class="back-btn" type="button" aria-label="Kembali ke halaman utama">Kembali</button>
+    </section>
+
+    <!-- Halaman Form Pendaftaran -->
+    <section id="form-page" role="region" aria-label="Halaman Form Pendaftaran" class="hidden" style="display: none; flex-direction: column; align-items: center; padding: 24px;">
+      <h1>Form Pendaftaran</h1>
+      <form action="https://formspree.io/f/xovwwwpn" method="POST" style="display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 500px;">
+        <input type="text" name="nama" placeholder="Nama Anda" required style="padding: 12px; border-radius: 8px; border: 1px solid #ccc;">
+        <input type="tel" name="whatsapp" placeholder="+62 812-3456-7890" required style="padding: 12px; border-radius: 8px; border: 1px solid #ccc;">
+        <textarea name="pesan" placeholder="Pesan atau alasan mendaftar..." rows="4" required style="padding: 12px; border-radius: 8px; border: 1px solid #ccc;"></textarea>
+        <button type="submit">Kirim</button>
+      </form>
+      <button id="form-back-btn" class="back-btn" type="button" aria-label="Kembali ke halaman utama" style="margin-top: 20px; background: #374151; color: white; padding: 10px 24px; border-radius: 8px;">Kembali</button>
+    </section>
+
+    <!-- Halaman Favorite Music -->
+    <section id="music-page" role="region" aria-label="Halaman Favorite Music" class="hidden" style="display: none; flex-direction: column; align-items: center; padding: 24px;">
+      <h1>Favorite Music 🎵</h1>
+      <iframe style="border-radius:12px; margin: 20px 0;" 
+        src="https://open.spotify.com/embed/track/7zuuWZo0MyOdG3VHg1Mgml?si=bPvh2mVQSrqHoRkUkF_jAQ" 
+        width="300" height="80" frameborder="0" 
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+        loading="lazy">
+      </iframe>
+      <p style="max-width: 600px; text-align: center; font-size: 1rem; color: #374151;">
+        <strong>Judul:</strong> Headbangerrrrr!!!!<br/>
+        <strong>Penyanyi:</strong> BABYMETAL<br/>
+        <strong>Lirik:</strong><br/>
+        Wajahmu mengalihkan duniaku<br/>
+        Menitikan air mata<br/>
+        Dan kau bilang: “Aku manusia kuat.”<br/>
+        Itu kamu...
+      </p>
+      
+      
+      <div style="max-width: 640px; background: #f9fafb; border-left: 6px solid #22c55e; padding: 16px 20px; margin-top: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); font-size: 0.95rem; line-height: 1.6; color: #1f2937; text-align: left;">
+        <strong>Deskripsi Lagu:</strong><br/><br/>
+        Lagu <em>"Headbangerrrr!!"</em> merupakan single keempat dari album <strong>MONOKROM</strong> milik Tulus, dirilis tahun 2017. 
+        Lagu ini dipilih sebagai lagu resmi <strong>Asian Para Games 2018</strong> dan menggambarkan semangat perjuangan serta daya tahan dalam menghadapi tantangan hidup.<br/><br/>
+        Lagu ini diproduksi oleh <strong>Ari Renaldi</strong> dan diaransemen dengan bantuan <strong>The City of Prague Philharmonic Orchestra</strong>. 
+        Diciptakan dan ditulis oleh Tulus sendiri, lagu ini telah diputar lebih dari <strong>82 juta kali</strong> di Spotify dan menjadi anthem populer yang penuh makna.
+      </div>
+
+      <div style="max-width: 600px; max-height: 250px; overflow-y: auto; padding: 16px; margin-top: 16px; background: #f1f5f9; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); color: #1f2937; text-align: left; font-size: 1rem; line-height: 1.6;">
+        <strong>Lirik Lengkap:</strong><br/><br/>
+        Wajahmu mengalihkan duniaku<br/>
+        Menitikan air mata<br/>
+        Dan kau bilang: “Aku manusia kuat.”<br/>
+        Itu kamu...<br/><br/>
+        Lihatlah luka ini<br/>
+        Yang sakitnya abadi<br/>
+        Seperti kisah kita<br/>
+        Yang tak akan pernah usai<br/><br/>
+        Kau ajarkan aku<br/>
+        Menjadi manusia kuat<br/>
+        Tuk bertahan walau terluka<br/><br/>
+        Kau ajarkan aku<br/>
+        Bahwa segalanya bisa dilawan<br/>
+        Walau dunia mencoba menjatuhkan kita<br/><br/>
+        Lihatlah luka ini<br/>
+        Yang sakitnya abadi<br/>
+        Seperti kisah kita<br/>
+        Yang tak akan pernah usai<br/><br/>
+        Kau ajarkan aku<br/>
+        Menjadi manusia kuat<br/>
+        Tuk bertahan walau terluka<br/><br/>
+        Kau ajarkan aku<br/>
+        Bahwa segalanya bisa dilawan<br/>
+        Walau dunia mencoba menjatuhkan kita<br/><br/>
+        Kita manusia kuat<br/>
+      </div>
+
+      <button id="music-back-btn" class="back-btn" type="button" aria-label="Kembali ke halaman utama" style="margin-top: 20px;">Kembali</button>
+    </section>
+
+  </main>
+
+  <button id="toggle-theme-btn" aria-label="Beralih mode gelap dan terang" title="Beralih mode gelap dan terang">🌓</button>
+
+  <div id="starfield" aria-hidden="true"></div>
+
+  <script>
+    const sejarahBtn = document.getElementById('sejarah-btn');
+    const backBtn = document.getElementById('back-btn');
+    const topVideosBtn = document.getElementById('top-videos-btn');
+    const topVideoBackBtn = document.getElementById('top-video-back-btn');
+    const homePage = document.getElementById('home-page');
+    const sejarahPage = document.getElementById('sejarah-page');
+    const topVideoPage = document.getElementById('top-video-page');
+    const toggleThemeBtn = document.getElementById('toggle-theme-btn');
+    const body = document.body;
+    const starfield = document.getElementById('starfield');
+    const githubSigninBtn = document.getElementById('github-signin-btn');
+
+    // Transition helpers
+    function hideSection(section) {
+      section.classList.add('hidden');
+      setTimeout(() => {
+        section.style.display = 'none';
+      }, 500);
+    }
+    function showSection(section) {
+      section.style.display = "flex";
+      setTimeout(() => {
+        section.classList.remove('hidden');
+      }, 10);
+    }
+
+    // Show / hide pages with transition
+    function showHome() {
+      hideSection(musicPage);
+      hideSection(formPage);
+      hideSection(sejarahPage);
+      hideSection(topVideoPage);
+      showSection(homePage);
+      window.history.pushState({page: 'home'}, '', window.location.pathname);
+      pauseAllVideos();
+    }
+    function showSejarah() {
+      hideSection(homePage);
+      hideSection(topVideoPage);
+      showSection(sejarahPage);
+      window.history.pushState({page: 'sejarah'}, '', '#sejarah');
+      pauseAllVideos();
+    }
+    function showTopVideos() {
+      hideSection(homePage);
+      hideSection(sejarahPage);
+      showSection(topVideoPage);
+      window.history.pushState({page: 'top-videos'}, '', '#top-videos');
+      pauseAllVideos();
+    }
+
+    sejarahBtn.addEventListener('click', showSejarah);
+    backBtn.addEventListener('click', showHome);
+    topVideosBtn.addEventListener('click', showTopVideos);
+    topVideoBackBtn.addEventListener('click', showHome);
+
+    
+    const formBtn = document.getElementById('form-btn');
+    const formPage = document.getElementById('form-page');
+    const formBackBtn = document.getElementById('form-back-btn');
+
+    function showFormPage() {
+      hideSection(homePage);
+      hideSection(sejarahPage);
+      hideSection(topVideoPage);
+      showSection(formPage);
+      window.history.pushState({page: 'form'}, '', '#form');
+      pauseAllVideos();
+    }
+
+    formBtn.addEventListener('click', showFormPage);
+    formBackBtn.addEventListener('click', showHome);
+
+
+    
+    const musicBtn = document.getElementById('music-btn');
+    const musicPage = document.getElementById('music-page');
+    const musicBackBtn = document.getElementById('music-back-btn');
+
+    function showMusicPage() {
+      hideSection(homePage);
+      hideSection(sejarahPage);
+      hideSection(topVideoPage);
+      hideSection(formPage);
+      showSection(musicPage);
+      window.history.pushState({page: 'music'}, '', '#music');
+      pauseAllVideos();
+    }
+
+    musicBtn.addEventListener('click', showMusicPage);
+    musicBackBtn.addEventListener('click', showHome);
+
+    // GitHub Sign-In button click directs to GitHub login page
+    githubSigninBtn.addEventListener('click', () => {
+      window.location.href = 'https://github.com/login';
+    });
+
+    // Clock update
+    const clockEl = document.getElementById('clock');
+    const timezoneSelect = document.getElementById('timezone-select');
+
+    function updateClock() {
+      const now = new Date();
+      let offset = 7;
+      if (timezoneSelect.value === 'WITA') offset = 8;
+      else if (timezoneSelect.value === 'WIT') offset = 9;
+      const utc = now.getTime() + now.getTimezoneOffset() * 60000;
+      const local = new Date(utc + 3600000 * offset);
+
+      const hours = String(local.getHours()).padStart(2, '0');
+      const minutes = String(local.getMinutes()).padStart(2, '0');
+      const seconds = String(local.getSeconds()).padStart(2, '0');
+      clockEl.textContent = `${hours}:${minutes}:${seconds} ${timezoneSelect.value}`;
+    }
+
+    setInterval(updateClock, 1000);
+    timezoneSelect.addEventListener('change', updateClock);
+    updateClock();
+
+    // History navigation
+    window.addEventListener('popstate', event => {
+      if(event.state && event.state.page === 'sejarah'){
+        showSejarah();
+      } else if(event.state && event.state.page === 'top-videos'){
+        showTopVideos();
+      } else if(window.location.hash === '#form') {
+        showFormPage();
+      } else if(window.location.hash === '#music') {
+        showMusicPage();
+      } else {
+        showHome();
+      }
+    });
+
+    // Video controls for HTML5 video elements
+    function initializeVideoControls() {
+      const videoColumns = document.querySelectorAll('.video-column');
+      videoColumns.forEach((column) => {
+        const video = column.querySelector('video');
+        const playPauseBtn = column.querySelector('.play-pause-btn');
+        const muteUnmuteBtn = column.querySelector('.mute-unmute-btn');
+
+        playPauseBtn.textContent = "Play";
+        muteUnmuteBtn.textContent = "Mute";
+
+        playPauseBtn.addEventListener('click', () => {
+          if(video.paused){
+            video.play();
+            playPauseBtn.textContent = 'Pause';
+          } else {
+            video.pause();
+            playPauseBtn.textContent = 'Play';
+          }
+        });
+
+        muteUnmuteBtn.addEventListener('click', () => {
+          if(video.muted){
+            video.muted = false;
+            muteUnmuteBtn.textContent = 'Mute';
+          } else {
+            video.muted = true;
+            muteUnmuteBtn.textContent = 'Unmute';
+          }
+        });
+
+        // Sync buttons state when video ends or pauses by other means
+        video.addEventListener('ended', () => {
+          playPauseBtn.textContent = 'Play';
+        });
+        video.addEventListener('pause', () => {
+          playPauseBtn.textContent = 'Play';
+        });
+        video.addEventListener('play', () => {
+          playPauseBtn.textContent = 'Pause';
+        });
+        video.addEventListener('volumechange', () => {
+          muteUnmuteBtn.textContent = video.muted ? 'Unmute' : 'Mute';
+        });
+      });
+    }
+
+    // Pause all videos
+    function pauseAllVideos() {
+      document.querySelectorAll('#top-video-page video').forEach(video => {
+        video.pause();
+      });
+      document.querySelectorAll('.play-pause-btn').forEach(btn => btn.textContent = 'Play');
+      document.querySelectorAll('.mute-unmute-btn').forEach(btn => btn.textContent = 'Mute');
+    }
+
+    // Starfield effect (unchanged)
+    function createStars(count = 100) {
+      starfield.innerHTML = '';
+      for(let i = 0; i < count; i++){
+        const star = document.createElement('div');
+        star.classList.add('star');
+        const sizeClass = ['small', 'medium', 'large'][Math.floor(Math.random() * 3)];
+        star.classList.add(sizeClass);
+        star.style.top = Math.random() * window.innerHeight + 'px';
+        star.style.left = Math.random() * window.innerWidth + 'px';
+        star.style.animationDelay = (Math.random() * 3) + 's';
+        starfield.appendChild(star);
+      }
+    }
+
+    function enableDarkMode(){
+      body.classList.add('dark-mode');
+      localStorage.setItem('theme', 'dark');
+      toggleThemeBtn.textContent = '🌓';
+      createStars(120);
+      starfield.style.display = 'block';
+    }
+    function disableDarkMode(){
+      body.classList.remove('dark-mode');
+      localStorage.setItem('theme', 'light');
+      toggleThemeBtn.textContent = '🌓';
+      starfield.style.display = 'none';
+    }
+
+    toggleThemeBtn.addEventListener('click', () => {
+      if(body.classList.contains('dark-mode')){
+        disableDarkMode();
+      } else if(window.location.hash === '#form') {
+        showFormPage();
+      } else if(window.location.hash === '#music') {
+        showMusicPage();
+      } else {
+        enableDarkMode();
+      }
+    });
+
+    window.addEventListener('resize', () => {
+      if(body.classList.contains('dark-mode')){
+        createStars(120);
+      }
+    });
+
+    
+  // Notifikasi kirim berhasil (untuk Formspree)
+  const form = document.querySelector('#form-page form');
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const formData = new FormData(form);
+    const response = await fetch(form.action, {
+      method: 'POST',
+      body: formData,
+      headers: { 'Accept': 'application/json' }
+    });
+    if (response.ok) {
+      alert("Pesan berhasil dikirim!");
+      form.reset();
+    } else {
+      alert("Terjadi kesalahan saat mengirim. Coba lagi.");
+    }
+  });
+
+
+    // On load
+    document.addEventListener('DOMContentLoaded', () => {
+      if(window.location.hash === '#sejarah') {
+        showSejarah();
+      } else if(window.location.hash === '#top-videos') {
+        showTopVideos();
+      } else if(window.location.hash === '#form') {
+        showFormPage();
+      } else if(window.location.hash === '#music') {
+        showMusicPage();
+      } else {
+        showHome();
+      }
+      const savedTheme = localStorage.getItem('theme');
+      if(savedTheme === 'dark'){
+        enableDarkMode();
+      } else if(window.location.hash === '#form') {
+        showFormPage();
+      } else if(window.location.hash === '#music') {
+        showMusicPage();
+      } else {
+        disableDarkMode();
+      }
+      initializeVideoControls();
+    });
+
+
+// Hitung jumlah ulang tahun setiap 8 Agustus dari 2025 hingga 2030
+function updateAnniversaryCountSummary() {
+  const countEl = document.getElementById("anniversary-count");
+  const today = new Date();
+  const startYear = 2025;
+  const endYear = 2030;
+  let count = 1;
+
+  for (let year = startYear; year <= endYear; year++) {
+    const anniversary = new Date(year, 7, 8); // Agustus (bulan ke-7 karena 0-based)
+    if (today >= anniversary) {
+      count++;
+    }
+  }
+
+  countEl.textContent = count;
+}
+updateAnniversaryCountSummary();
+
+
+// Event spesial setiap 15 Juni: emoji melayang di background + aktifkan starfield
+function triggerAnniversaryVisualEvent() {
+  const today = new Date();
+  if (today.getDate() === 15 && today.getMonth() === 5) {
+    const starfield = document.getElementById('starfield');
+    starfield.innerHTML = '';
+    starfield.style.display = 'block';
+
+    if (!body.classList.contains('dark-mode')) {
+      enableDarkMode();
+    }
+
+    const emojis = ["🥳", "👑", "🎭", "🎉", "🎊"];
+    const count = 30;
+
+    for (let i = 0; i < count; i++) {
+      const emoji = document.createElement('div');
+      emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      emoji.style.position = 'absolute';
+      emoji.style.fontSize = (Math.random() * 1.5 + 1.5) + 'rem';
+      emoji.style.top = Math.random() * 100 + '%';
+      emoji.style.left = Math.random() * 100 + '%';
+      emoji.style.opacity = 0.75;
+      emoji.style.animation = `floatEmoji ${3 + Math.random() * 3}s ease-in-out infinite alternate, spinEmoji ${2 + Math.random() * 3}s linear infinite`;
+      starfield.appendChild(emoji);
+    }
+  }
+}
+
+const emojiStyle = document.createElement('style');
+emojiStyle.textContent = `
+@keyframes floatEmoji {
+  0% { transform: translateY(0px); opacity: 1; }
+  100% { transform: translateY(-30px); opacity: 0.5; }
+}
+@keyframes spinEmoji {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}`;
+document.head.appendChild(emojiStyle);
+
+// Panggil saat halaman dimuat
+triggerAnniversaryVisualEvent();
+
+
+// Countdown menuju 8 Agustus
+function updateCountdownToAnniversary() {
+  const now = new Date();
+  let target = new Date(now.getFullYear(), 7, 8);
+  if (now > target) target = new Date(now.getFullYear() + 1, 7, 8);
+  const diffTime = target - now;
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  const el = document.getElementById("countdown-days");
+  if (el) el.textContent = diffDays;
+}
+updateCountdownToAnniversary();
+setInterval(updateCountdownToAnniversary, 3600000);
+
+// Rainbow text saat 8 Agustus
+function activateRainbowTextEffect() {
+  const today = new Date();
+  if (today.getDate() === 8 && today.getMonth() === 7) {
+    const el = document.getElementById("event-info");
+    if (!el) return;
+    const colors = ["#ef4444", "#f59e0b", "#10b981", "#3b82f6", "#8b5cf6", "#ec4899"];
+    let i = 0;
+    setInterval(() => {
+      el.style.color = colors[i % colors.length];
+  // Rainbow tambahan untuk teks "Selamat Datang Di Agbm.Id Website"
+  const welcomeText = document.getElementById("welcome-text");
+  if (welcomeText) {
+    let k = 0;
+    setInterval(() => {
+      welcomeText.style.color = colors[k % colors.length];
+      k++;
+    }, 1000);
+  }
+
+  // Rainbow tambahan untuk teks "Selamat Datang"
+  const title = document.getElementById("selamat-datang");
+  if (title) {
+    let j = 0;
+    setInterval(() => {
+      title.style.color = colors[j % colors.length];
+      j++;
+    }, 1000);
+  }
+
+      i++;
+    }, 1000);
+  }
+}
+activateRainbowTextEffect();
+
+// Kembang api otomatis dengan 3 bentuk: love, bunga, lingkaran
+function autoFireworks() {
+  const today = new Date();
+  if (today.getDate() !== 8 || today.getMonth() !== 7) return;
+
+  const shapes = ['heart', 'flower', 'circle'];
+  setInterval(() => {
+    const shape = shapes[Math.floor(Math.random() * shapes.length)];
+    createFireworkPattern(shape);
+  }, 2500);
+}
+
+function createFireworkPattern(type) {
+  const container = document.createElement('div');
+  container.style.position = 'fixed';
+  container.style.top = Math.random() * 50 + 20 + '%';
+  container.style.left = Math.random() * 80 + '%';
+  container.style.zIndex = 9999;
+  container.style.pointerEvents = 'none';
+
+  const count = 36;
+  for (let i = 0; i < count; i++) {
+    const angle = (2 * Math.PI * i) / count;
+    const particle = document.createElement('div');
+    particle.style.position = 'absolute';
+    particle.style.width = '6px';
+    particle.style.height = '6px';
+    particle.style.borderRadius = '50%';
+    particle.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 60%)`;
+    particle.style.top = '0';
+    particle.style.left = '0';
+    particle.style.transform = 'translate(-50%, -50%)';
+
+    let dx = 0;
+    let dy = 0;
+    if (type === 'circle') {
+      dx = Math.cos(angle) * 60;
+      dy = Math.sin(angle) * 60;
+    } else if (type === 'heart') {
+      const t = angle;
+      dx = 16 * Math.pow(Math.sin(t), 3) * 3;
+      dy = - (13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t)) * 3;
+    } else if (type === 'flower') {
+      const k = 5;
+      const r = 50 * Math.sin(k * angle);
+      dx = r * Math.cos(angle);
+      dy = r * Math.sin(angle);
+    }
+
+    particle.style.animation = `firework-move-${i}-${Date.now()} 1.2s ease-out forwards`;
+    const style = document.createElement('style');
+    style.innerHTML = `
+    @keyframes firework-move-${i}-${Date.now()} {
+      to {
+        transform: translate(${dx}px, ${dy}px);
+        opacity: 0;
+      }
+    }`;
+    document.head.appendChild(style);
+    container.appendChild(particle);
+  }
+
+  document.body.appendChild(container);
+  setTimeout(() => container.remove(), 1500);
+}
+
+autoFireworks();
+
+  </script>
+  <style>
+    /* Star field container and stars (unchanged) */
+    #starfield {
+      pointer-events: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      overflow: visible;
+      z-index: 1000;
+      display: none;
+    }
+    .star {
+      position: absolute;
+      border-radius: 50%;
+      background: white;
+      opacity: 0.8;
+      animation-name: twinkle;
+      animation-iteration-count: infinite;
+      animation-timing-function: ease-in-out;
+      animation-direction: alternate;
+      filter: drop-shadow(0 0 2px white);
+    }
+    .star.small {
+      width: 1px;
+      height: 1px;
+      animation-duration: 1.5s;
+    }
+    .star.medium {
+      width: 2px;
+      height: 2px;
+      animation-duration: 2.5s;
+    }
+    .star.large {
+      width: 3px;
+      height: 3px;
+      animation-duration: 3.5s;
+    }
+    @keyframes twinkle {
+      0% { opacity: 0.4; }
+      100% { opacity: 1; }
+    }
+  </style>
+</body>
+</html>
+
