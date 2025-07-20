@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Agbm Protocol:Need Verification</title>
+  <style>
+    body {
+      margin: 0;
+      background: #000;
+      color: #fff;
+      font-family: monospace;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .box {
+      background: #111;
+      border: 2px solid #444;
+      padding: 40px;
+      border-radius: 12px;
+      text-align: center;
+      width: 90%;
+      max-width: 420px;
+    }
+
+    .glow-title {
+      font-size: 1.6rem;
+      color: #0f0;
+      text-shadow: 0 0 8px #0f0, 0 0 16px #0f0, 0 0 24px #0f0;
+      margin-bottom: 16px;
+    }
+
+    .box h2 {
+      font-size: 1.4rem;
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin: 20px 0;
+    }
+
+    input[type="checkbox"] {
+      width: 26px;
+      height: 26px;
+      accent-color: #0f0;
+      cursor: pointer;
+    }
+
+    button {
+      padding: 12px 24px;
+      font-size: 1rem;
+      background: #222;
+      color: #0f0;
+      border: 1px solid #0f0;
+      cursor: pointer;
+      border-radius: 6px;
+      display: none;
+    }
+
+    @media (min-width: 768px) {
+      .box {
+        padding: 50px;
+        max-width: 500px;
+      }
+
+      .glow-title {
+        font-size: 2rem;
+      }
+
+      .box h2 {
+        font-size: 1.7rem;
+      }
+
+      label {
+        font-size: 1.3rem;
+      }
+
+      input[type="checkbox"] {
+        width: 30px;
+        height: 30px;
+      }
+
+      button {
+        font-size: 1.1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <div class="glow-title">Agbm Protocol</div>
+    <h2>🔒 Verification Required</h2>
+    <label><input type="checkbox" id="verifBox"> I am not a bot</label>
+    <button id="continueBtn">Continue</button>
+  </div>
+
+  <script>
+    const checkbox = document.getElementById("verifBox");
+    const button = document.getElementById("continueBtn");
+
+    checkbox.addEventListener("change", () => {
+      button.style.display = checkbox.checked ? "inline-block" : "none";
+    });
+
+    button.addEventListener("click", () => {
+      window.location.href = "main.html"; // ganti ke URL web 2 lu
+    });
+  </script>
+</body>
+</html>

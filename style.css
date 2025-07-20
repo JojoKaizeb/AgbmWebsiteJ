@@ -1,0 +1,134 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Inter:wght@400;600&display=swap');
+
+/* Zona Ritual */
+#ritual-zone {
+  font-family: 'Inter', sans-serif;
+  transition: background 0.3s, color 0.3s;
+  position: relative;
+  z-index: 0;
+}
+
+/* Teks glitch ringan */
+#ritual-zone .ritual-glitch {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 3rem;
+  animation: softGlitch 4s infinite;
+  color: #991b1b;
+  text-align: center;
+}
+
+@keyframes softGlitch {
+  0%, 100% { text-shadow: 0 0 2px #991b1b; }
+  50% { text-shadow: 0 0 6px #000; }
+}
+
+/* Tombol utama */
+#ritual-zone .btn-main {
+  padding: 12px 24px;
+  font-size: 1.2rem;
+  border-radius: 12px;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+/* Hover aktif: membesar */
+#ritual-zone .btn-main:hover {
+  transform: scale(1.1);
+  z-index: 2;
+}
+
+/* Hover pasif: mengecil */
+#ritual-zone .button-row:hover .btn-main:not(:hover) {
+  transform: scale(0.9);
+  opacity: 0.8;
+}
+
+/* Button color di dark/light mode */
+#ritual-zone.dark .btn-main {
+  background: linear-gradient(135deg, #22c55e, #4ade80);
+  color: #111;
+}
+#ritual-zone.light .btn-main {
+  background: linear-gradient(135deg, #7f1d1d, #dc2626);
+  color: white;
+}
+
+/* Zona tombol */
+#ritual-zone .button-row {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 40px;
+  flex-wrap: wrap;
+}
+
+/* Mode GodBabymetal aktif */
+#ritual-zone.god-mode {
+  background: linear-gradient(145deg, #111, #1a1a1a);
+  color: #991b1b;
+}
+
+/* Efek Aurora merah-hitam */
+#aurora {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(255,0,0,0.15), transparent 40%);
+  mix-blend-mode: screen;
+  transition: background 0.2s ease;
+  z-index: 9999;
+}
+
+body {
+  margin: 0;
+  background: #111;
+  color: white;
+  font-family: sans-serif;
+}
+
+.menu {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  margin: 100px auto;
+  background: #222;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+}
+
+.wind-circle {
+  position: absolute;
+  width: 260px;
+  height: 260px;
+  border: 2px dashed rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  animation: spinWind 4s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes spinWind {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Cursor custom hanya untuk laptop */
+@media (hover: hover) and (pointer: fine) {
+  html {
+    cursor: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" height="32" width="32"><text y="25" font-size="28">👆</text></svg>') 0 0, auto;
+  }
+  #ritual-zone button:hover,
+  #ritual-zone a:hover,
+  #ritual-zone .btn-main:hover {
+    cursor: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" height="32" width="32"><text y="25" font-size="28">✊</text></svg>') 0 0, auto;
+  }
+}
