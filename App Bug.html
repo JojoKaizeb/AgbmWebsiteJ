@@ -1,0 +1,1666 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>AGBM WEBSITE — Futuristic Suite</title>
+  <link rel="icon" href="https://files.catbox.moe/sj3416.jpg" type="image/jpeg" />
+  <meta name="theme-color" content="#0b0f1a" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&display=swap');
+
+    :root{
+      --bg: #0b0f1a;
+      --card: #11182a;
+      --elev: #0c1222;
+      --text: #e6edf3;
+      --muted: #94a3b8;
+      --brand1: #22c55e;
+      --brand2: #16a34a;
+      --accent: #38bdf8;
+      --warn: #f59e0b;
+      --radius: 16px;
+      --shadow: 0 8px 24px rgba(0,0,0,.35);
+      --maxw: 540px;
+      --ring: 0 0 0 1px rgba(56,189,248,.25), 0 0 40px rgba(56,189,248,.08) inset;
+    }
+    /* Themes */
+    [data-theme="fox-dark"]{
+      --bg:#0a0e19;--card:#0f162a;--elev:#0c1426;--accent:#f472b6;--brand1:#f97316;--brand2:#fb7185;
+    }
+    [data-theme="neon"]{
+      --bg:#06080f;--card:#0c1224;--elev:#0a0f20;--accent:#22d3ee;--brand1:#22c55e;--brand2:#06b6d4;
+    }
+    [data-theme="slate"]{
+      --bg:#0b1020;--card:#121826;--elev:#0e1424;--accent:#93c5fd;--brand1:#84cc16;--brand2:#22c55e;
+    }
+
+    *{box-sizing:border-box}
+    html{-webkit-text-size-adjust:100%}
+    body{
+      margin:0; font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--text); background:var(--bg);
+      display:flex; justify-content:center; min-height:100svh; overflow-x:hidden;
+    }
+    a{color:#a5f3fc; text-decoration:none}
+
+    /* ===== Canvas Futuristic DNA ===== */
+    #dna-bg{
+      position:fixed; inset:0; width:100%; height:100%; z-index:0; background:var(--bg);
+    }
+
+    /* ===== Layout ===== */
+    .wrap{
+      width:100%; max-width:var(--maxw);
+      padding:16px 14px 76px; display:flex; flex-direction:column; gap:16px;
+      position:relative; z-index:5;
+    }
+    .card{
+      background:linear-gradient(180deg, color-mix(in oklab, var(--card) 92%, transparent), color-mix(in oklab, var(--elev) 92%, transparent));
+      border-radius:var(--radius); box-shadow:var(--shadow); padding:16px;
+      border:1px solid rgba(255,255,255,.06);
+      animation:fadeIn .25s ease both;
+    }
+    @keyframes fadeIn{from{opacity:0; transform:translateY(8px)}to{opacity:1; transform:none}}
+    h1{margin:0; text-align:center; font-weight:700; font-size:clamp(22px, 5.6vw, 28px); letter-spacing:.2px}
+    .muted{color:var(--muted); font-size:.92rem}
+    .brand{
+      display:flex; flex-direction:column; align-items:center; gap:12px; text-align:center
+    }
+    .brand img{width:100px; height:100px; border-radius:18px; object-fit:cover; box-shadow:var(--shadow)}
+    #clock{font-weight:700; color:var(--brand1); letter-spacing:.6px}
+    select{
+      width:100%; background:#0f172a; color:var(--text);
+      border:1px solid rgba(255,255,255,.08); border-radius:12px; padding:10px; font:inherit;
+    }
+
+    /* ===== Announcement Bar ===== */
+    .announce{
+      display:none; align-items:center; gap:10px; padding:10px 12px; border-radius:12px;
+      background:linear-gradient(90deg, rgba(245,158,11,.16), rgba(56,189,248,.12));
+      border:1px solid rgba(245,158,11,.35);
+      font-weight:700;
+    }
+    .announce.active{display:flex}
+
+    /* ===== Buttons ===== */
+    .btn{
+      -webkit-tap-highlight-color: transparent;
+      appearance:none; border:0; border-radius:12px; padding:12px 14px; cursor:pointer;
+      font-weight:700; letter-spacing:.2px;
+      color:#081018; background:linear-gradient(135deg,var(--brand1),var(--brand2));
+      box-shadow:0 6px 14px rgba(34,197,94,.35);
+      display:flex; align-items:center; justify-content:center; gap:8px; font-size:.98rem;
+      transition:transform .12s ease, filter .12s ease, opacity .2s ease;
+    }
+    .btn:active{ transform:translateY(1px) }
+    .btn--ghost{
+      background:#1b2238; color:var(--text); border:1px solid rgba(255,255,255,.08);
+      box-shadow:none;
+    }
+    .btn--chip{
+      background:#0e162d; color:#a3e635; border:1px dashed rgba(163,230,53,.35);
+      box-shadow:none; font-weight:600;
+    }
+    .btnGrid{ display:grid; grid-template-columns:1fr 1fr; gap:10px }
+
+    /* ===== Sections / Router ===== */
+    section{ display:none; opacity:0; transform:translateY(6px); transition:opacity .18s ease, transform .18s ease }
+    section.active{ display:block; opacity:1; transform:translateY(0) }
+
+    /* ===== Sticky Bottom Navbar ===== */
+    .navbar{
+      position:fixed; left:50%; transform:translateX(-50%); bottom:10px; z-index:40;
+      width:min(560px, 94vw); background:linear-gradient(180deg, rgba(17,24,42,.9), rgba(12,18,34,.9));
+      border:1px solid rgba(255,255,255,.08); border-radius:16px; box-shadow:0 12px 32px rgba(0,0,0,.45);
+      display:grid; grid-template-columns:repeat(6,1fr); gap:8px; padding:8px;
+      backdrop-filter: blur(10px);
+    }
+    .navbtn{
+      display:flex; flex-direction:column; align-items:center; gap:4px;
+      color:#d1d5db; background:#0e1528; border:1px solid rgba(255,255,255,.06); border-radius:12px;
+      padding:10px 8px; font-size:.8rem; cursor:pointer;
+      transition: all .2s ease; /* Added for better hover effect */
+    }
+    .navbtn.active{ color:#0b1118; background:linear-gradient(135deg,var(--brand1),var(--brand2)); border-color:transparent }
+    .navbtn:hover{ transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,.2); } /* Added hover effect */
+
+
+    /* ===== Top Videos Futuristic ===== */
+    .vgrid{ display:grid; grid-template-columns:1fr; gap:12px }
+    .vcard{
+      position:relative; border-radius:14px; padding:12px; background:#0c1222;
+      border:1px solid rgba(56,189,248,.18);
+      box-shadow: var(--ring);
+    }
+    .badge{
+      position:absolute; top:10px; left:10px; font-weight:800; font-size:.9rem;
+      padding:6px 10px; border-radius:999px;
+      color:#051018; background:linear-gradient(135deg,#fde047,#f59e0b);
+      box-shadow:0 4px 16px rgba(245,158,11,.45); letter-spacing:.2px;
+    }
+    .badge.silver{ background:linear-gradient(135deg,#e5e7eb,#9ca3af) }
+    .badge.bronze{ background:linear-gradient(135deg,#eab308,#b45309) }
+    .vmedia{
+      width:100%; aspect-ratio:16/9; border-radius:12px; background:#000; display:block; overflow:hidden;
+      box-shadow:0 10px 24px rgba(0,0,0,.35);
+    }
+    .vtitle{ text-align:center; margin:10px 0 0; font-weight:700; letter-spacing:.3px }
+    .vdesc{ text-align:center; color:var(--muted); font-size:.9rem; margin-top:4px }
+    .vctrl{ display:flex; gap:8px; margin-top:10px; flex-wrap:wrap }
+    .vctrl .btn{ padding:10px 12px; font-weight:700 }
+    .chapters{ display:flex; gap:8px; flex-wrap:wrap; margin-top:8px }
+
+    /* PiP mini */
+    .pip{ position:sticky; bottom:10px; width:100%; max-width:340px; margin-left:auto; border:1px solid rgba(255,255,255,.12) }
+
+    /* ===== Music Shuffle (besar) ===== */
+    #music iframe{ width:100%; height:192px; border-radius:14px; margin-bottom:12px; background:#000 }
+    #musicInfo{ text-align:center; font-weight:700; margin:4px 0 6px }
+    #musicCtrl{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px }
+    #autoRow{ display:flex; align-items:center; gap:10px; justify-content:space-between; margin-top:8px }
+    #autoNext{ accent-color:var(--brand1) }
+    #timer{ width:56%; accent-color:var(--accent) }
+    .lyrics{ background:#0b1220; border:1px solid rgba(255,255,255,.06); border-radius:12px; padding:10px; margin-top:10px; font-size:.92rem; line-height:1.5 }
+
+    /* Music Visualizer */
+    #musicVisualizer {
+      width: 100%;
+      height: 60px; /* Adjusted height for visualizer */
+      background: #000;
+      border-radius: 8px;
+      margin-top: 12px;
+      border: 1px solid rgba(56,189,248,.18);
+    }
+
+    /* ===== Assets ===== */
+    .asset{
+      display:grid; gap:12px; grid-template-columns:1fr;
+      background:linear-gradient(180deg, rgba(24,36,64,.6), rgba(12,18,34,.7));
+      border:1px solid rgba(56,189,248,.15); border-radius:14px; padding:12px;
+    }
+    .asset .title{ font-weight:800; text-transform:uppercase; letter-spacing:.12em }
+    .asset .cta{ display:flex; gap:8px; flex-wrap:wrap }
+    .pill{
+      padding:8px 10px; border-radius:999px; font-weight:700; font-size:.85rem;
+      background:#0b1328; color:#a5f3fc; border:1px solid rgba(56,189,248,.25)
+    }
+
+    /* ===== Gallery (rapi + elegan) ===== */
+    .tools{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:10px }
+    .tools select, .tools button{ background:#0f172a; color:var(--text); border:1px solid rgba(255,255,255,.08); border-radius:10px; padding:8px 10px; font:inherit }
+    .ggrid{
+      display:grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap:10px;
+    }
+    @media (min-width: 560px){ .ggrid{ grid-template-columns: repeat(3, 1fr); } }
+    .gitem{
+      position:relative; border-radius:14px; overflow:hidden; background:#0b1220;
+      border:1px solid rgba(255,255,255,.06);
+      box-shadow:0 8px 20px rgba(0,0,0,.35);
+      cursor:pointer;
+    }
+    .gitem img, .gitem video{ width:100%; height:100%; display:block; object-fit:cover; aspect-ratio: 1 / 1; }
+    .gcap{
+      position:absolute; bottom:6px; left:6px; right:6px;
+      background:linear-gradient(180deg, rgba(2,6,23,0), rgba(2,6,23,.72));
+      color:#cbd5e1; padding:8px 10px; border-radius:10px; font-weight:700; font-size:.82rem;
+    }
+
+    /* ===== Lightbox / Modal ===== */
+    .modal{
+      position:fixed; inset:0; display:none; align-items:center; justify-content:center;
+      background:rgba(0,0,0,.65); z-index:50;
+      padding:16px;
+    }
+    .modal.active{ display:flex }
+    .modalBox{
+      width:min(920px, 96vw); background:#0b1220; border:1px solid rgba(255,255,255,.08);
+      border-radius:16px; padding:12px; box-shadow:0 24px 60px rgba(0,0,0,.5)
+    }
+    .modalMedia{ width:100%; border-radius:12px; background:#000; aspect-ratio:16/9; object-fit:contain }
+    .modalHead{ display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:8px }
+    .x{ background:#15213d; color:#e2e8f0; border:1px solid rgba(255,255,255,.1); border-radius:10px; padding:8px 10px; font-weight:800; cursor:pointer }
+    .modalFoot{ display:flex; gap:8px; justify-content:space-between; margin-top:8px }
+
+    /* ===== Misc ===== */
+    .divider{
+      height:1px; background:linear-gradient(90deg, rgba(56,189,248,0), rgba(56,189,248,.3), rgba(56,189,248,0));
+      margin:12px 0;
+    }
+    .copyright{
+      text-align:center; font-weight:600; font-size:.9rem; color:#cbd5e1;
+      background:#0b1220; border-radius:12px; padding:10px 12px; border:1px solid rgba(255,255,255,.06);
+    }
+
+    /* Particle Background */
+    #particle-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1; /* Below content, above DNA-bg */
+      pointer-events: none; /* Allow clicks to pass through */
+    }
+
+    /* Timeline Sejarah */
+    .timeline {
+      position: relative;
+      padding: 20px 0;
+      list-style: none;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--brand1), var(--brand2));
+      transform: translateX(-50%);
+      z-index: 1;
+    }
+    .timeline-item {
+      position: relative;
+      margin-bottom: 40px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+      z-index: 2;
+    }
+    .timeline-item.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .timeline-item:nth-child(odd) {
+      text-align: right;
+      padding-right: 60px;
+    }
+    .timeline-item:nth-child(even) {
+      text-align: left;
+      padding-left: 60px;
+    }
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      top: 10px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 2px solid var(--card);
+      z-index: 3;
+      transform: translateX(-50%);
+    }
+    .timeline-item:nth-child(odd)::before {
+      right: -8px;
+    }
+    .timeline-item:nth-child(even)::before {
+      left: -8px;
+    }
+    .timeline-content {
+      background: var(--elev);
+      padding: 15px;
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,.08);
+      box-shadow: var(--shadow);
+    }
+    .timeline-year {
+      font-weight: 700;
+      color: var(--brand1);
+      margin-bottom: 5px;
+      font-size: 1.1rem;
+    }
+    .timeline-title {
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 5px;
+      font-size: 1rem;
+    }
+    .timeline-desc {
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    /* Form Pendaftaran Styles */
+    .form-group {
+      margin-bottom: 15px;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .form-group input[type="text"],
+    .form-group input[type="tel"],
+    .form-group textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,.1);
+      background: #1a202c; /* Darker background for input */
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.95rem;
+    }
+    .form-group textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+    .form-submit-btn {
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    /* Intro Styles */
+    #intro-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: black;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      color: white;
+      font-size: 2em;
+      font-weight: bold;
+      text-shadow: 0 0 10px rgba(255,255,255,0.8);
+      opacity: 1;
+      transition: opacity 2s ease-out;
+    }
+
+    #intro-screen.fade-out {
+      opacity: 0;
+      pointer-events: none; /* Disable interaction during fade-out */
+    }
+
+    #intro-screen span {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 1s ease-in-out, transform 1s ease-in-out;
+      margin: 10px 0;
+    }
+
+    #intro-screen span.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Loading Screen Styles */
+    #loading-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: black;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000; /* Higher z-index than intro */
+      color: white;
+      font-size: 1.8em;
+      font-weight: bold;
+      text-shadow: 0 0 8px rgba(255,255,255,0.7);
+      opacity: 1;
+      transition: opacity 1s ease-out;
+    }
+
+    #loading-screen.fade-out {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    #loading-screen button {
+      margin-top: 30px;
+      padding: 12px 25px;
+      font-size: 1em;
+      font-weight: bold;
+      background: linear-gradient(135deg, var(--brand1), var(--brand2));
+      color: #081018;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 6px 14px rgba(34,197,94,.35);
+      transition: transform 0.2s ease, opacity 0.2s ease;
+      opacity: 0; /* Hidden by default */
+    }
+
+    #loading-screen button.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    #loading-screen button:active {
+      transform: translateY(1px);
+    }
+
+    
+/* Loading Bar Styles (simplified) */
+#loading-bar-container {
+  width: 80%;
+  max-width: 360px;
+  height: 8px;
+  background: rgba(148,163,184,0.25); /* slate-400 track */
+  border-radius: 999px;
+  margin-top: 16px;
+  overflow: hidden;
+}
+#loading-bar {
+  width: 0%;
+  height: 100%;
+  background: var(--accent);
+  border-radius: 999px;
+  transition: width .12s linear;
+}
+#loading-bar-text {
+  margin-top: 10px;
+  position: static;
+  transform: none;
+  font-size: .9em;
+  font-weight: 600;
+  color: #e5e7eb;
+  text-shadow: none;
+}
+
+main.hidden {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 1s ease-in-out;
+}
+
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 1s ease-in-out;
+    }
+
+    main.fade-in {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Settings Sidebar/Modal Styles */
+    #settings-sidebar {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.65);
+      z-index: 50;
+      display: flex;
+      justify-content: flex-end; /* Muncul dari kanan */
+      align-items: flex-start;
+      padding-top: 10px;
+      visibility: hidden; /* Sembunyikan secara default */
+      opacity: 0;
+      transition: opacity 0.3s ease-out, visibility 0.3s ease-out;
+    }
+    #settings-sidebar.active {
+      visibility: visible;
+      opacity: 1;
+    }
+    #settings-sidebar .modalBox {
+      width: min(300px, 90vw);
+      margin-right: 10px; /* Jarak dari kanan */
+      transform: translateX(100%); /* Awalnya di luar layar */
+      transition: transform 0.3s ease-out;
+      background: linear-gradient(180deg, color-mix(in oklab, var(--card) 92%, transparent), color-mix(in oklab, var(--elev) 92%, transparent));
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 16px;
+    }
+    #settings-sidebar.active .modalBox {
+      transform: translateX(0); /* Animasi slide-in */
+    }
+    #settings-sidebar .modalHead {
+      justify-content: space-between;
+      align-items: center;
+    }
+    #settings-sidebar .modalHead .x {
+      background: #1b2238; /* Warna tombol close */
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 8px;
+      padding: 6px 10px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* Settings Button */
+    #settings-btn {
+      position: fixed;
+      top: 16px;
+      right: 14px;
+      z-index: 50;
+      padding: 8px 12px;
+      font-size: 1.2em;
+      background: linear-gradient(135deg, var(--brand1), var(--brand2));
+      color: #081018;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(34,197,94,.35);
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+    #settings-btn:active {
+      transform: translateY(1px);
+    }
+
+    /* Logo Transparansi */
+    .brand img.transparent-logo {
+      opacity: 0.7; /* Contoh transparansi */
+      transition: opacity 0.3s ease;
+    }
+
+    @media (max-width: 600px) {
+      .timeline::before {
+        left: 20px;
+        transform: translateX(0);
+      }
+      .timeline-item {
+        text-align: left !important;
+        padding-left: 60px !important;
+        padding-right: 0 !important;
+      }
+      .timeline-item::before {
+        left: 20px !important;
+        transform: translateX(-50%) !important;
+      }
+      #intro-screen, #loading-screen {
+        font-size: 1.5em; /* Adjust font size for smaller screens */
+      }
+      #settings-btn {
+        top: 10px;
+        right: 10px;
+        padding: 6px 10px;
+        font-size: 1em;
+      }
+      .navbar {
+        width: 96vw; /* Sedikit lebih lebar di mobile */
+        padding: 6px;
+        gap: 6px;
+      }
+      .navbtn {
+        padding: 8px 6px;
+        font-size: .7rem;
+      }
+    }
+
+  </style>
+</head>
+<body data-theme="neon">
+  <!-- Loading Screen -->
+  <div id="loading-screen">
+    <span id="loading-message">XvN Exclusive</span>
+    <div id="loading-bar-container">
+      <div id="loading-bar"></div>
+      <span id="loading-bar-text">Loading...</span> <!-- Teks di tengah loading bar -->
+    </div>
+    <button id="loading-next-btn">Next</button>
+  </div>
+
+  <!-- Intro Screen -->
+  <div id="intro-screen">
+    <span id="intro-text-1">Created By A God Babymetal</span>
+    <span id="intro-text-2">Powered By Netlify</span>
+  </div>
+  <audio id="intro-audio" src="https://files.catbox.moe/a0l6ib.mp3" preload="auto"></audio>
+
+  <canvas id="dna-bg"></canvas>
+  <canvas id="particle-canvas"></canvas> <!-- Particle background -->
+
+  <main class="wrap hidden"> <!-- Added 'hidden' class initially -->
+    <!-- Settings Button -->
+    <button id="settings-btn" class="btn">☰</button>
+
+    <!-- ANNOUNCEMENT BAR (auto tampil jika tanggal khusus) -->
+    <div id="announce" class="announce"></div>
+
+    <!-- HOME -->
+    <section id="home" class="active">
+      <div class="brand card">
+        <img src="https://files.catbox.moe/a2ym1f.jpg" alt="Logo" id="brand-logo">
+        <h1>A GOD BABYMETAL</h1> <!-- Glitch effect added -->
+        <div id="clock" aria-live="polite">--:--:-- WIB</div>
+        <label for="tz" class="sr" style="position:absolute;left:-9999px">Zona waktu</label>
+        <select id="tz">
+          <option value="WIB" selected>WIB (GMT+7)</option>
+          <option value="WITA">WITA (GMT+8)</option>
+          <option value="WIT">WIT (GMT+9)</option>
+        </select>
+      </div>
+
+      <div class="card">
+        <div class="muted" style="margin-bottom:8px">Navigasi</div>
+        <div class="btnGrid">
+          <button class="btn" data-to="music">🎶 Music Shuffle</button>
+          <button class="btn" data-to="videos">🏆 Top Videos</button>
+          <button class="btn" data-to="assets">🛡️ Assets</button>
+          <button class="btn" data-to="gallery">🖼️ Gallery</button>
+          <button class="btn" data-to="events">📅 Events</button>
+          <button class="btn" data-to="sejarah">📜 Sejarah</button>
+          <button class="btn" data-to="pendaftaran">📝 Form Pendaftaran</button> <!-- New Button -->
+                  <button class="btn" data-to="support">💚 Support</button>
+        </div>
+      </div>
+
+      <div class="card" style="display:grid; gap:8px">
+        <div>Anniversary: <strong id="annivCount">—</strong></div>
+        <div class="muted">Menuju 8 Agustus berikutnya: <strong><span id="annivDays">—</span> hari</strong></div>
+      </div>
+
+      <div class="card" style="text-align:center">
+        <blockquote id="quote" style="font-style:italic"></blockquote>
+      </div>
+
+      <div class="copyright">© A GOD BABYMETAL 2025 • Futuristic UI</div>
+    </section>
+
+    <!-- MUSIC SHUFFLE -->
+    <section id="music" class="card">
+      <h1>Music Shuffle</h1>
+      <div id="musicInfo" class="muted">—</div>
+      <iframe id="musicFrame" src="" frameborder="0" allow="autoplay; clipboard-write; encrypted-media"></iframe>
+      <canvas id="musicVisualizer"></canvas> <!-- Music Visualizer added -->
+      <div id="musicCtrl">
+        <button class="btn btn--ghost" id="prevSong">⏮ Prev</button>
+        <button class="btn" id="shuffleSong">🔀 Shuffle</button>
+        <button class="btn btn--ghost" id="nextSong">⏭ Next</button>
+      </div>
+      <div id="autoRow">
+        <label class="muted" style="display:flex;align-items:center;gap:8px">
+          <input id="autoNext" type="checkbox"> Auto-next
+        </label>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="muted">Timer</span>
+          <input id="timer" type="range" min="15" max="60" value="30">
+          <span class="muted"><span id="timerVal">30</span>s</span>
+        </div>
+      </div>
+
+      <!-- Lyrics (static sync ringan) -->
+      <details class="lyrics">
+        <summary style="cursor:pointer;font-weight:800">🎤 Lyrics (preview sync)</summary>
+        <div id="lyrBox" class="muted" style="margin-top:8px; white-space:pre-line"></div>
+      </details>
+
+      <button class="btn btn--ghost" data-to="home" style="margin-top:12px">Kembali</button>
+    </section>
+
+    <!-- TOP VIDEOS (3 Pemenang) -->
+    <section id="videos" class="card">
+      <h1>Top Videos — Champions</h1>
+      <div class="vgrid">
+        <!-- Gold -->
+        <div class="vcard" data-rank="1">
+          <div class="badge">🥇 JUARA 1</div>
+          <video class="vmedia" id="vid1" preload="none" playsinline controls poster="" data-src="https://files.catbox.moe/sdx9b7.mp4"></video>
+          <div class="vtitle">Headbangeeerrrrr!!!</div>
+          <div class="vdesc">Energi Su-metal seperti kerasukan Setan. Wajib nonton!</div>
+          <div class="chapters" data-for="vid1">
+            <button class="btn btn--ghost" data-t="0">Intro 0:00</button>
+            <button class="btn btn--ghost" data-t="46">Headbang 0:46</button>
+            <button class="btn btn--ghost" data-t="100">Solo 1:40</button>
+          </div>
+          <div class="vctrl">
+            <button class="btn" data-act="pp">Play</button>
+            <button class="btn btn--ghost" data-act="mute">Mute</button>
+            <button class="btn btn--chip" data-act="pip">Pin (PiP)</button>
+          </div>
+        </div>
+        <!-- Silver -->
+        <div class="vcard" data-rank="2">
+          <div class="badge silver">🥈 JUARA 2</div>
+          <video class="vmedia" id="vid2" preload="none" playsinline controls poster="" data-src="https://files.catbox.moe/6gpvp2.mp4"></video>
+          <div class="vtitle">Kami Band Together</div>
+          <div class="vdesc">Harmonisasi band + vokal yang solid.</div>
+          <div class="chapters" data-for="vid2">
+            <button class="btn btn--ghost" data-t="12">Riff 0:12</button>
+            <button class="btn btn--ghost" data-t="48">Hook 0:48</button>
+          </div>
+          <div class="vctrl">
+            <button class="btn" data-act="pp">Play</button>
+            <button class="btn btn--ghost" data-act="mute">Mute</button>
+            <button class="btn btn--chip" data-act="pip">Pin (PiP)</button>
+          </div>
+        </div>
+        <!-- Bronze -->
+        <div class="vcard" data-rank="3">
+          <div class="badge bronze">🥉 JUARA 3</div>
+          <video class="vmedia" id="vid3" preload="none" playsinline controls poster="" data-src="https://files.catbox.moe/xudq0j.mp4"></video>
+          <div class="vtitle">Doki Doki Morning</div>
+          <div class="vdesc">Lagu Pertama Milik BABYMETAL.</div>
+          <div class="chapters" data-for="vid3">
+            <button class="btn btn--ghost" data-t="72">Spinner 1:12</button>
+            <button class="btn btn--ghost" data-t="140">The Best 2:20</button>
+          </div>
+          <div class="vctrl">
+            <button class="btn" data-act="pp">Play</button>
+            <button class="btn btn--ghost" data-act="mute">Mute</button>
+            <button class="btn btn--chip" data-act="pip">Pin (PiP)</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+      <div class="btnGrid">
+        <button class="btn btn--chip" data-to="assets">Lihat Asset Resmi</button>
+        <button class="btn btn--ghost" data-to="home">Kembali</button>
+      </div>
+    </section>
+
+    <!-- ASSETS -->
+    <section id="assets" class="card">
+      <h1>Assets</h1>
+      <!-- A God BABYMETAL Asset -->
+      <div class="asset">
+        <div class="title">A God BABYMETAL Asset</div>
+        <div class="muted">Toolkit visual bertema “Fox God” untuk komunitas (banner, badge, poster mini).</div>
+        <div class="cta">
+          <span class="pill">Neon Fox Badge</span>
+          <span class="pill">Poster 1080p</span>
+          <span class="pill">Avatar Pack</span>
+        </div>
+        <div class="muted">Unduh kit: <em>coming soon</em></div>
+        <button class="btn btn--ghost" data-to="gallery">Buka Contoh di Gallery</button>
+      </div>
+
+      <!-- BABYMETAL Official Asset (Music) -->
+      <div class="asset">
+        <div class="title">BABYMETAL Official Asset</div>
+        <div class="muted">Beberapa aset visual dan konten di website ini adalah milik BABYMETAL. Disajikan sebagai referensi dan penjelasan singkat untuk para penggemar.</div>
+        <iframe style="width:100%;height:152px;border-radius:12px"
+          src="https://files.catbox.moe/c3lru7.jpg" frameborder="0"
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+        <div class="cta">
+          <span class="pill">Official Playlist</span>
+          <span class="pill">Live Highlights</span>
+          <span class="pill">Fan Favorite</span>
+        </div>
+      </div>
+
+      <button class="btn btn--ghost" data-to="home">Kembali</button>
+    </section>
+
+    <!-- GALLERY -->
+    <section id="gallery" class="card">
+      <h1>Gallery</h1>
+
+      <div class="tools">
+        <label class="muted">Filter</label>
+        <select id="gFilter">
+          <option value="all" selected>Semua</option>
+          <option value="poster">Poster</option>
+          <option value="artwork">Artwork</option>
+          <option value="stage">Stage</option>
+          <option value="video">Video</option>
+        </select>
+
+        <label class="muted">Sort</label>
+        <select id="gSort">
+          <option value="new">Terbaru</option>
+          <option value="old">Terlama</option>
+        </select>
+
+        <button class="btn btn--ghost" id="openBatch">🔎 Batch Viewer</button>
+      </div>
+
+      <div class="ggrid" id="ggrid">
+        <!-- Images (1–6) -->
+        <figure class="gitem" data-type="img" data-tag="poster" data-ts="2025-08-10" data-src="https://files.catbox.moe/mxwo5v.jpg">
+          <img loading="lazy" src="https://files.catbox.moe/mxwo5v.jpg" alt="BABYMETAL 1">
+          <figcaption class="gcap">Poster Look 1</figcaption>
+        </figure>
+
+        <figure class="gitem" data-type="img" data-tag="poster" data-ts="2025-07-12" data-src="https://files.catbox.moe/t5d83o.jpg">
+          <img loading="lazy" src="https://files.catbox.moe/t5d83o.jpg" alt="BABYMETAL 2">
+          <figcaption class="gcap">Poster Look 2</figcaption>
+        </figure>
+
+        <figure class="gitem" data-type="img" data-tag="stage" data-ts="2025-06-01" data-src="https://files.catbox.moe/zywk7i.jpg">
+          <img loading="lazy" src="https://files.catbox.moe/zywk7i.jpg" alt="BABYMETAL 3">
+          <figcaption class="gcap">Stage Shot</figcaption>
+        </figure>
+
+        <figure class="gitem" data-type="img" data-tag="stage" data-ts="2025-05-15" data-src="https://files.catbox.moe/bu5r5f.jpg">
+          <img loading="lazy" src="https://files.catbox.moe/bu5r5f" alt="BABYMETAL 4">
+          <figcaption class="gcap">Backstage</figcaption>
+        </figure>
+
+        <figure class="gitem" data-type="img" data-tag="artwork" data-ts="2025-04-02" data-src="https://files.catbox.moe/lrdiz4.png">
+          <img loading="lazy" src="https://files.catbox.moe/lrdiz4.png" alt="BABYMETAL 5">
+          <figcaption class="gcap">Artwork 1</figcaption>
+        </figure>
+
+        <figure class="gitem" data-type="img" data-tag="artwork" data-ts="2025-03-18" data-src="https://files.catbox.moe/35elru.png">
+          <img loading="lazy" src="https://files.catbox.moe/35elru.png" alt="BABYMETAL 6">
+          <figcaption class="gcap">Artwork 2</figcaption>
+        </figure>
+
+        <!-- Video khusus (7) -->
+        <figure class="gitem" data-type="vid" data-tag="video" data-ts="2025-02-01" data-src="https://files.catbox.moe/9lrgeh.mp4">
+          <video muted playsinline preload="metadata" poster="" src="https://files.catbox.moe/9lrgeh.mp4"></video>
+          <figcaption class="gcap">Video Spesial</figcaption>
+        </figure>
+      </div>
+
+      <div class="divider"></div>
+      <div class="btnGrid">
+        <button class="btn btn--chip" data-to="assets">Lihat Asset Resmi</button>
+        <button class="btn btn--ghost" data-to="home">Kembali</button>
+      </div>
+    </section>
+
+    <!-- EVENTS / CALENDAR MINI -->
+    <section id="events" class="card">
+      <h1>Events</h1>
+      <div class="muted" style="text-align:center;margin-bottom:10px">Tanggal penting untuk fans BABYMETAL</div>
+      <ul style="list-style:none;padding:0;margin:0;display:grid;gap:10px">
+        <li class="card" style="padding:12px">
+          <strong>Anniversary Squad — 8 Agustus</strong><br>
+          <a target="_blank" href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Anniversary%20Squad%20BABYMETAL&dates=20250808/20250809&details=Perayaan%20Anniversary%20Squad&ctz=Asia/Jakarta">Add to Google Calendar</a>
+        </li>
+        <li class="card" style="padding:12px">
+          <strong>Suzuka Nakamoto Birthday — 20 Desember</strong><br>
+          <a target="_blank" href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Suzuka%20Nakamoto%20Birthday&dates=20251220/20251221&details=Happy%20Birthday%20Su-metal!&ctz=Asia/Jakarta">Add to Google Calendar</a>
+        </li>
+        <li class="card" style="padding:12px">
+          <strong>Moa Kikuchi Birthday — 4 Juli</strong><br>
+          <a target="_blank" href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Moa%20Kikuchi%20Birthday&dates=20250704/20250705&details=Happy%20Birthday%20Moametal!&ctz=Asia/Jakarta">Add to Google Calendar</a>
+        </li>
+        <li class="card" style="padding:12px">
+          <strong>Yui Mizuno Birthday — 20 Juni</strong><br>
+          <a target="_blank" href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Yui%20Mizuno%20Birthday&dates=20250620/20250621&details=Happy%20Birthday%20Yuimetal!&ctz=Asia/Jakarta">Add to Google Calendar</a>
+        </li>
+        <li class="card" style="padding:12px">
+          <strong>Momoko Okazaki Birthday — 3 Maret</strong><br>
+          <a target="_blank" href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Momoko%20Okazaki%20Birthday&dates=20250303/20250304&details=Happy%20Birthday%20Momometal!&ctz=Asia/Jakarta">Add to Google Calendar</a>
+        </li>
+      </ul>
+
+      <div class="divider"></div>
+      <div style="display:grid;gap:8px;text-align:center">
+        <div>Countdown event terdekat: <strong id="nextEvtName">—</strong></div>
+        <div class="muted">Sisa <strong id="nextEvtDays">—</strong> hari</div>
+      </div>
+
+      <button class="btn btn--ghost" data-to="home" style="margin-top:12px">Kembali</button>
+    </section>
+
+    <!-- SEJARAH -->
+    <section id="sejarah" class="card">
+      <h1>Sejarah</h1>
+      <div class="timeline">
+        <!-- Timeline items will be rendered here by JavaScript -->
+      </div>
+      <button class="btn btn--ghost" data-to="home" style="margin-top:10px">Kembali</button>
+    </section>
+
+    <!-- FORM PENDAFTARAN -->
+    <section id="pendaftaran" class="card">
+      <h1>Form Pendaftaran</h1>
+      <p class="muted" style="text-align:center; margin-bottom: 15px;">
+        Isi formulir di bawah ini untuk bergabung dengan AGBM.ID Community. Pastikan data yang Anda masukkan benar.
+      </p>
+      <p class="muted" style="margin-bottom: 20px;">
+        **AGBM.ID Community** adalah wadah bagi para konten kreator yang berdedikasi untuk mengedit, mempromosikan, dan meningkatkan nama baik Squad BABYMETAL. Tugas utama Anda adalah berkarya, menaikkan nama squad, dan selalu mengikuti aturan yang berlaku. Mari berkarya bersama!
+      </p>
+
+      <form method="POST">
+        <div class="form-group">
+          <label for="nama_lengkap">Nama Lengkap:</label>
+          <input type="text" id="nama_lengkap" name="Nama Lengkap" required placeholder="Masukkan nama lengkap Anda">
+        </div>
+        <div class="form-group">
+          <label for="nomor_whatsapp">Nomor WhatsApp:</label>
+          <input type="tel" id="nomor_whatsapp" name="Nomor WhatsApp" required placeholder="Contoh: +6281234567890">
+        </div>
+        <div class="form-group">
+          <label for="alasan_join">Alasan Singkat Ingin Bergabung:</label>
+          <textarea id="alasan_join" name="Alasan Bergabung" required placeholder="Jelaskan mengapa Anda ingin bergabung (maks. 200 karakter)"></textarea>
+        </div>
+        <button type="submit" class="btn form-submit-btn">Kirim Pendaftaran</button>
+      </form>
+
+      <button class="btn btn--ghost" data-to="home" style="margin-top:12px">Kembali</button>
+    </section>
+
+  
+<!-- SUPPORT -->
+<section id="support" class="card">
+  <h1>Support</h1>
+  <p class="muted" style="text-align:center; margin-bottom:10px">
+    Dukung squad kami melalui Saweria. Setiap donasi membantu server,event komunitas.
+  </p>
+  <div style="display:grid;gap:10px;place-items:center;text-align:center">
+    <a class="btn" href="https://saweria.co/raditx7" target="_blank" rel="noopener">💚 Dukung via Saweria</a>
+    <div class="muted" style="max-width:520px">
+      Terima kasih banyak buat kamu yang sudah mau donate. Dukunganmu berarti banget buat perkembangan komunitas. Fox God bless! 🦊
+    </div>
+  </div>
+  <button class="btn btn--ghost" data-to="home" style="margin-top:12px">Kembali</button>
+</section>
+
+
+  </main>
+
+  <!-- Modal Lightbox -->
+  <div class="modal" id="modal">
+    <div class="modalBox">
+      <div class="modalHead">
+        <div style="font-weight:800; letter-spacing:.12em; text-transform:uppercase">Preview</div>
+        <div style="display:flex;gap:8px">
+          <button class="x" id="prevMedia">⟨</button>
+          <button class="x" id="nextMedia">⟩</button>
+          <button class="x" id="modalClose">✕</button>
+        </div>
+      </div>
+      <div id="modalBody"></div>
+      <div class="modalFoot">
+        <div class="muted">Gunakan ← → untuk next/prev</div>
+        <div class="muted">Klik area gelap untuk menutup</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings Sidebar/Modal -->
+  <div id="settings-sidebar">
+    <div class="modalBox">
+      <div class="modalHead">
+        <div style="font-weight:800; letter-spacing:.12em; text-transform:uppercase">Settings</div>
+        <button class="x" id="settings-close">✕</button>
+      </div>
+      <div class="divider"></div>
+      <div class="muted" style="margin-bottom:8px">Tema</div>
+      <div class="btnGrid">
+        <button class="btn btn--ghost" data-theme="neon">Neon</button>
+        <button class="btn btn--ghost" data-theme="fox-dark">Fox Dark</button>
+        <button class="btn btn--ghost" data-theme="slate">Slate</button>
+      </div>
+      <div class="divider"></div>
+      <button class="btn btn--chip" id="kbdHelp">⌨️ Shortcuts</button>
+    </div>
+  </div>
+
+  <!-- Sticky Bottom Navbar -->
+  <nav class="navbar" id="navbar">
+    <button class="navbtn active" data-to="home">🏠<span class="muted" style="font-size:.75rem">Home</span></button>
+    <button class="navbtn" data-to="music">🎶<span class="muted" style="font-size:.75rem">Music</span></button>
+    <button class="navbtn" data-to="videos">🏆<span class="muted" style="font-size:.75rem">Videos</span></button>
+    <button class="navbtn" data-to="gallery">🖼️<span class="muted" style="font-size:.75rem">Gallery</span></button>
+    <button class="navbtn" data-to="assets">🛡️<span class="muted" style="font-size:.75rem">Assets</span></button>
+      <button class="navbtn" data-to="support">💚<span class="muted" style="font-size:.75rem">Support</span></button>
+  </nav>
+
+  <script>
+    /* ===== Helpers ===== */
+    const $ = (s, r=document)=>r.querySelector(s);
+    const $$ = (s, r=document)=>[...r.querySelectorAll(s)];
+    const vibrate = ms => (navigator.vibrate?.(ms), void 0);
+
+    /* ===== Router ===== */
+    const sections = {home:'#home', music:'#music', videos:'#videos', assets:'#assets', gallery:'#gallery', events:'#events', sejarah:'#sejarah', pendaftaran:'#pendaftaran', support:'#support'}; // Added pendaftaran
+    function show(key){
+      Object.values(sections).forEach(sel=>{
+        const el=$(sel); if(!el) return;
+        const act = ('#'+key)===sel;
+        el.classList.toggle('active', act);
+        el.style.display = act ? 'block' : 'none';
+      });
+      $$('#navbar .navbtn').forEach(b=>b.classList.toggle('active', b.getAttribute('data-to')===key));
+      if(key!=='videos') cleanupVideos();
+      if(key==='videos') mountVideos();
+      if(key==='sejarah') initTimelineObserver(); // Initialize timeline observer when sejarah section is active
+      vibrate(10);
+      history.replaceState(null, '', '#'+key);
+    }
+    document.addEventListener('click', (e)=>{
+      const to = e.target.closest('[data-to]')?.getAttribute('data-to');
+      if(to){ e.preventDefault(); show(to); }
+      const th = e.target.closest('[data-theme]')?.getAttribute('data-theme');
+      if(th){
+        document.body.setAttribute('data-theme', th);
+        localStorage.setItem('userTheme', th); // Simpan tema ke Local Storage
+      }
+    });
+    // masuk via hash
+    window.addEventListener('DOMContentLoaded', ()=>{
+      // Initial setup: hide main content and intro screen
+      mainContent.classList.add('hidden');
+      introScreen.style.display = 'none'; // Ensure intro screen is hidden initially
+
+      // Show loading screen
+      loadingScreen.style.display = 'flex';
+      // Next button will appear automatically at 100% progress.
+
+      // Muat preferensi dari Local Storage saat DOMContentLoaded
+      const savedTheme = localStorage.getItem('userTheme');
+      if (savedTheme) {
+        document.body.setAttribute('data-theme', savedTheme);
+      }
+
+      const savedTimeZone = localStorage.getItem('userTimeZone');
+      if (savedTimeZone) {
+        $('#tz').value = savedTimeZone;
+        tick(); // Perbarui jam setelah memuat zona waktu
+      }
+
+      const savedAutoNext = localStorage.getItem('musicAutoNext');
+      if (savedAutoNext !== null) { // Periksa jika ada nilai tersimpan
+        autoNext.checked = (savedAutoNext === 'true');
+      }
+
+      const savedTimerVal = localStorage.getItem('musicTimerVal');
+      if (savedTimerVal) {
+        timer.value = savedTimerVal;
+        timerVal.textContent = savedTimerVal;
+      }
+
+      // Initialize particle canvas
+      initParticles();
+      // Initialize music visualizer
+      initMusicVisualizer();
+      // Render timeline
+      renderTimeline();
+      // Initialize timeline observer if sejarah is active on load
+      if (location.hash.replace('#','') === 'sejarah') { // Check hash for 'sejarah'
+        initTimelineObserver();
+      }
+    });
+
+    /* ===== Clock + TZ ===== */
+    const tz = $('#tz'), clk = $('#clock');
+    function tick(){
+      const now = new Date();
+      let off = tz.value==='WITA'?8: tz.value==='WIT'?9:7;
+      const utc = now.getTime() + now.getTimezoneOffset()*60000;
+      const d = new Date(utc + off*3600000);
+      clk.textContent = `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}:${String(d.getSeconds()).padStart(2,'0')} ${tz.value}`;
+    }
+    setInterval(tick,1000);
+    tz.addEventListener('change', ()=>{
+      tick();
+      localStorage.setItem('userTimeZone', tz.value); // Simpan zona waktu ke Local Storage
+    });
+    tick(); // Panggil sekali saat awal untuk menampilkan waktu
+
+    /* ===== Announcement Bar (Aug 8 & Birthdays) =====
+       Birthdays: Momoko 03-03, Yui 06-20, Moa 07-04, Suzuka 12-20
+    */
+    function checkAnnouncement(){
+      const bar = $('#announce');
+      const d = new Date();
+      const m = d.getMonth()+1, day = d.getDate();
+      let msg = '';
+      if(m===8 && day===8) msg = '🎉 Happy Anniversary Squad — 8 Agustus!';
+      else if(m===3 && day===3) msg = '🎂 Momoko Okazaki Birthday — 3 Maret';
+      else if(m===6 && day===20) msg = '🎂 Yui Mizuno Birthday — 20 Juni';
+      else if(m===7 && day===4) msg = '🎂 Moa Kikuchi Birthday — 4 Juli';
+      else if(m===12 && day===20) msg = '🎂 Suzuka Nakamoto Birthday — 20 Desember';
+      bar.textContent = msg;
+      bar.classList.toggle('active', !!msg);
+    }
+    checkAnnouncement();
+
+    /* ===== Anniversary ===== */
+    function setAnniv(){
+      const founded = new Date(2024,7,8); // 8 Agustus 2024
+      const t = new Date();
+      let n = t.getFullYear()-founded.getFullYear();
+      const thisYear = new Date(t.getFullYear(),7,8);
+      if(t<thisYear) n--;
+      $('#annivCount').textContent = String(Math.max(0,n));
+      // countdown hari
+      let target = new Date(t.getFullYear(),7,8);
+      if(t>target) target = new Date(t.getFullYear()+1,7,8);
+      const days = Math.ceil((target - t)/(1000*60*60*24));
+      $('#annivDays').textContent = String(days);
+    }
+    setAnniv(); setInterval(setAnniv, 3600000);
+
+    /* ===== Quotes ===== */
+    const quotes = [
+      "We are BABYMETAL!",
+      "Metal never dies — Fox God be with you.",
+      "Headbang with harmony.",
+      "Unleash the kitsune within!"
+    ];
+    $('#quote').textContent = quotes[Math.floor(Math.random()*quotes.length)];
+
+    /* ===== Keyboard Shortcuts ===== */
+    addEventListener('keydown', (e)=>{
+      if(['INPUT','TEXTAREA'].includes(document.activeElement.tagName)) return;
+      const k = e.key.toLowerCase();
+      if(k==='m') show('music');
+      if(k==='g') show('gallery');
+      if(k==='v') show('videos');
+      if(k==='e') show('events');
+      if(k==='h') show('home');
+      if(k==='p') show('pendaftaran'); // Shortcut for Pendaftaran
+      if(k==='arrowright') $('#nextSong')?.click();
+      if(k==='arrowleft') $('#prevSong')?.click();
+      if(k==='s') toggleSettingsSidebar(); // Shortcut for Settings
+    });
+    $('#kbdHelp').addEventListener('click', ()=>{
+      alert('Shortcuts:\nH=Home • M=Music • V=Videos • G=Gallery • E=Events • P=Pendaftaran • S=Settings • ←/→=Prev/Next Song');
+    });
+
+    /* ===== Events: next upcoming ===== */
+    const events = [
+      {name:'Momoko Okazaki Birthday', m:3, d:3},
+      {name:'Yui Mizuno Birthday', m:6, d:20},
+      {name:'Moa Kikuchi Birthday', m:7, d:4},
+      {name:'Anniversary Squad', m:8, d:8},
+      {name:'Suzuka Nakamoto Birthday', m:12, d:20},
+    ];
+    function nextEvent(){
+      const now = new Date();
+      let best = null, bestDiff = Infinity;
+      for(const ev of events){
+        let y = now.getFullYear();
+        let dt = new Date(y, ev.m-1, ev.d);
+        if(dt < new Date(now.getFullYear(), now.getMonth(), now.getDate())) dt = new Date(y+1, ev.m-1, ev.d);
+        const diff = Math.ceil((dt - now)/(1000*60*60*24));
+        if(diff < bestDiff){ bestDiff = diff; best = {name:ev.name, days:diff}; }
+      }
+      $('#nextEvtName').textContent = best?.name || '—';
+      $('#nextEvtDays').textContent = best?.days ?? '—';
+    }
+    nextEvent();
+
+    /* ===== Music Shuffle ===== */
+    const musicList = [
+      {title:"Headbangerrrrr!!!!", src:"https://open.spotify.com/embed/track/7zuuWZo0MyOdG3VHg1Mgml"},
+      {title:"Onedari Daisakusen", src:"https://open.spotify.com/embed/track/3kGT8ibGepflSyggXpxRcH"},
+      {title:"GJ!", src:"https://open.spotify.com/embed/track/2G93DMHcH5wJ4Hb4lXaT0K"}
+    ];
+    let mIdx = Math.floor(Math.random()*musicList.length);
+    const mFrame = $('#musicFrame'), mInfo = $('#musicInfo');
+    const autoNext = $('#autoNext'), timer = $('#timer'), timerVal = $('#timerVal');
+
+    timer.addEventListener('input', ()=>{
+      timerVal.textContent = timer.value;
+      localStorage.setItem('musicTimerVal', timer.value); // Simpan nilai timer
+    });
+    autoNext.addEventListener('change', ()=>{
+      localStorage.setItem('musicAutoNext', autoNext.checked); // Simpan status auto-next
+    });
+
+    timerVal.textContent = timer.value; // Set initial value
+
+    function loadSong(idx){
+      mIdx = (idx + musicList.length) % musicList.length;
+      const item = musicList[mIdx];
+      mFrame.src = item.src;
+      mInfo.textContent = 'Now Playing: ' + item.title;
+    }
+    loadSong(mIdx);
+    $('#nextSong').addEventListener('click', ()=> loadSong(mIdx+1));
+    $('#prevSong').addEventListener('click', ()=> loadSong(mIdx-1));
+    $('#shuffleSong').addEventListener('click', ()=>{
+      let r; do{ r = Math.floor(Math.random()*musicList.length) } while(r===mIdx);
+      loadSong(r);
+    });
+    setInterval(()=>{ if(autoNext.checked){ loadSong(mIdx+1); } }, 1000*Number(timer.value));
+    // Simple lyric preview (demo)
+    const lyr = [
+      {t:0,  l:"We are BABYMETAL!"},
+      {t:8,  l:"Raise your horns — Fox God!"},
+      {t:16, l:"Headbang! Headbang!"},
+      {t:24, l:"Unstoppable metal party!"}
+    ];
+    function renderLyrics(sec=0){
+      const curr = lyr.filter(x=>x.t<=sec).slice(-1)[0]?.l || '(intro...)';
+      $('#lyrBox').textContent = curr;
+    }
+    let lyrSec=0; setInterval(()=>{ if(document.querySelector('#music').classList.contains('active')){ lyrSec+=1; renderLyrics(lyrSec);} }, 1000);
+
+    /* ===== Music Visualizer (Simulated) ===== */
+    let visualizerCanvas, visualizerCtx, animationFrameId;
+    function initMusicVisualizer() {
+      visualizerCanvas = $('#musicVisualizer');
+      visualizerCtx = visualizerCanvas.getContext('2d');
+      visualizerCanvas.width = visualizerCanvas.offsetWidth;
+      visualizerCanvas.height = visualizerCanvas.offsetHeight;
+      drawVisualizer();
+    }
+
+    function drawVisualizer() {
+      animationFrameId = requestAnimationFrame(drawVisualizer);
+
+      visualizerCtx.clearRect(0, 0, visualizerCanvas.width, visualizerCanvas.height);
+
+      const barWidth = 5;
+      const gap = 2;
+      const numBars = Math.floor(visualizerCanvas.width / (barWidth + gap));
+      const baseHeight = visualizerCanvas.height / 2;
+
+      for (let i = 0; i < numBars; i++) {
+        const x = i * (barWidth + gap);
+        // Simulate audio data with random values for visual effect
+        const height = (Math.sin(Date.now() * 0.005 + i * 0.5) * 0.5 + 0.5) * (visualizerCanvas.height * 0.8);
+        const y = baseHeight - height / 2;
+
+        visualizerCtx.fillStyle = `rgba(56, 189, 248, ${0.5 + Math.random() * 0.5})`; // Accent color with random opacity
+        visualizerCtx.fillRect(x, y, barWidth, height);
+      }
+    }
+
+    /* ===== Top Videos: Lazy mount + controls + Chapters + PiP ===== */
+    let io=null, videosMounted=false;
+    function mountVideos(){
+      if(videosMounted) return;
+      $$('#videos video.vmedia').forEach(v=>{
+        const src = v.getAttribute('data-src');
+        if(src){ v.src = src; v.load(); }
+      });
+      // Auto-pause jika tidak terlihat
+      io = new IntersectionObserver((ents)=>{
+        ents.forEach(({isIntersecting,target})=>{
+          if(!isIntersecting && !target.paused) target.pause();
+        });
+      }, {root:$('#videos'), threshold:.2});
+      $$('#videos video.vmedia').forEach(v=> io.observe(v));
+      // Controls + chapters + PiP
+      $$('#videos .vcard').forEach(card=>{
+        const v = card.querySelector('video.vmedia');
+        const pp = card.querySelector('[data-act="pp"]');
+        const mt = card.querySelector('[data-act="mute"]');
+        const pip = card.querySelector('[data-act="pip"]');
+        const ch = card.querySelector('.chapters');
+
+        const setPP = ()=> pp.textContent = v.paused ? 'Play' : 'Pause';
+        pp.addEventListener('click', ()=>{ if(v.paused){ v.play().catch(()=>{});} else { v.pause(); } setPP(); });
+        v.addEventListener('play', setPP); v.addEventListener('pause', setPP);
+        mt.addEventListener('click', ()=>{ v.muted=!v.muted; mt.textContent = v.muted?'Unmute':'Mute'; });
+
+        ch?.addEventListener('click', (e)=>{
+          const t = e.target.closest('button')?.getAttribute('data-t'); if(!t) return;
+          v.currentTime = Number(t); v.play().catch(()=>{});
+        });
+
+        pip.addEventListener('click', ()=>{
+          // CSS sticky PiP
+          v.classList.toggle('pip');
+          pip.textContent = v.classList.contains('pip') ? 'Unpin' : 'Pin (PiP)';
+        });
+      });
+      videosMounted=true;
+    }
+    function cleanupVideos(){
+      if(io){ io.disconnect(); io=null; }
+      $$('#videos video.vmedia').forEach(v=>{ try{v.pause()}catch{}; v.removeAttribute('src'); v.load(); v.classList.remove('pip'); });
+      videosMounted=false;
+    }
+
+    /* ===== Gallery Lightbox + Filter/Sort + Batch Viewer ===== */
+    const modal = $('#modal'), modalBody = $('#modalBody'), modalClose=$('#modalClose');
+    const prevMedia=$('#prevMedia'), nextMedia=$('#nextMedia');
+    const ggrid = $('#ggrid');
+    let galleryItems = $$('#ggrid .gitem');
+    let currentIdx = -1;
+
+    function openModalByIndex(i){
+      if(i<0||i>=galleryItems.length) return;
+      currentIdx = i;
+      const node = galleryItems[i];
+      modalBody.innerHTML='';
+      if(node.dataset.type==='img'){
+        const img = new Image();
+        img.src = node.dataset.src;
+        img.className='modalMedia';
+        modalBody.appendChild(img);
+      }else{
+        const vid = document.createElement('video');
+        vid.src = node.dataset.src; vid.className='modalMedia'; vid.controls=true; vid.autoplay=true; vid.playsInline=true;
+        modalBody.appendChild(vid);
+      }
+      modal.classList.add('active');
+    }
+    function openModal(node){ openModalByIndex(galleryItems.indexOf(node)); }
+    function closeModal(){
+      modal.classList.remove('active');
+      modalBody.innerHTML='';
+    }
+    ggrid.addEventListener('click', (e)=>{
+      const fig = e.target.closest('.gitem');
+      if(!fig) return; openModal(fig);
+    });
+    modal.addEventListener('click', (e)=>{ if(e.target===modal) closeModal(); });
+    modalClose.addEventListener('click', closeModal);
+    prevMedia.addEventListener('click', ()=> openModalByIndex((currentIdx-1+galleryItems.length)%galleryItems.length));
+    nextMedia.addEventListener('click', ()=> openModalByIndex((currentIdx+1)%galleryItems.length));
+    addEventListener('keydown', (e)=>{
+      if(!modal.classList.contains('active')) return;
+      if(e.key==='ArrowLeft') prevMedia.click();
+      if(e.key==='ArrowRight') nextMedia.click();
+      if(e.key==='Escape') closeModal();
+    });
+    $('#openBatch').addEventListener('click', ()=>{
+      openModalByIndex(0);
+    });
+
+    // Filter & sort
+    function applyGallery(){
+      const f = $('#gFilter').value;
+      const s = $('#gSort').value;
+      galleryItems = $$('#ggrid .gitem'); // refresh
+      const arr = [...galleryItems];
+      arr.forEach(el=>{
+        const show = f==='all' || el.dataset.tag===f;
+        el.style.display = show ? '' : 'none';
+      });
+      const vis = arr.filter(el=> el.style.display!=='none');
+      vis.sort((a,b)=>{
+        const ta = new Date(a.dataset.ts).getTime();
+        const tb = new Date(b.dataset.ts).getTime();
+        return s==='new' ? tb - ta : ta - tb;
+      });
+      // Re-append in sorted order
+      vis.forEach(el=> ggrid.appendChild(el));
+      galleryItems = vis; // update for modal nav
+    }
+    $('#gFilter').addEventListener('change', applyGallery);
+    $('#gSort').addEventListener('change', applyGallery);
+    applyGallery();
+
+    /* ===== DNA Background Animation ===== */
+    const c = document.getElementById('dna-bg');
+    const ctx = c.getContext('2d');
+    function resize(){ c.width=innerWidth; c.height=innerHeight; }
+    addEventListener('resize', resize); resize();
+    let nodes = Array.from({length:50}, ()=>({
+      x:Math.random()*c.width, y:Math.random()*c.height,
+      vx:(Math.random()-.5)*.55, vy:(Math.random()-.5)*.55
+    }));
+    function draw(){
+      ctx.clearRect(0,0,c.width,c.height);
+      // subtle glow grid
+      ctx.fillStyle='rgba(56,189,248,.018)';
+      for(let i=0;i<c.width;i+=48) ctx.fillRect(i,0,1,c.height);
+      for(let j=0;j<c.height;j+=48) ctx.fillRect(0,j,c.width,1);
+      // nodes
+      ctx.fillStyle='rgba(255,255,255,.75)';
+      nodes.forEach(n=>{
+        n.x+=n.vx; n.y+=n.vy;
+        if(n.x<0||n.x>c.width) n.vx*=-1;
+        if(n.y<0||n.y>c.height) n.vy*=-1;
+        ctx.beginPath(); ctx.arc(n.x,n.y,2,0,Math.PI*2); ctx.fill();
+      });
+      // links (DNA-ish)
+      ctx.strokeStyle='rgba(56,189,248,.28)';
+      for(let i=0;i<nodes.length;i++){
+        for(let j=i+1;j<nodes.length;j++){
+          const dx=nodes[i].x-nodes[j].x, dy=nodes[i].y-nodes[j].y;
+          const d = Math.hypot(dx,dy);
+          if(d<120){
+            ctx.globalAlpha = 1 - (d/120);
+            ctx.beginPath(); ctx.moveTo(nodes[i].x, nodes[i].y); ctx.lineTo(nodes[j].x, nodes[j].y); ctx.stroke();
+            ctx.globalAlpha = 1;
+          }
+        }
+      }
+      requestAnimationFrame(draw);
+    }
+    draw();
+
+    /* ===== Particle Background (Interactive) ===== */
+    let particleCanvas, particleCtx, particles = [], mouse = { x: null, y: null, radius: 100 };
+    const particleCount = 100;
+
+    function initParticles() {
+      particleCanvas = $('#particle-canvas');
+      particleCtx = particleCanvas.getContext('2d');
+      particleCanvas.width = window.innerWidth;
+      particleCanvas.height = window.innerHeight;
+
+      window.addEventListener('resize', () => {
+        particleCanvas.width = window.innerWidth;
+        particleCanvas.height = window.innerHeight;
+      });
+
+      particleCanvas.addEventListener('mousemove', (e) => {
+        mouse.x = e.x;
+        mouse.y = e.y;
+      });
+      particleCanvas.addEventListener('mouseleave', () => {
+        mouse.x = null;
+        mouse.y = null;
+      });
+
+      for (let i = 0; i < particleCount; i++) {
+        particles.push(new Particle());
+      }
+      animateParticles();
+    }
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * particleCanvas.width;
+        this.y = Math.random() * particleCanvas.height;
+        this.size = Math.random() * 3 + 1;
+        this.speedX = Math.random() * 0.5 - 0.25;
+        this.speedY = Math.random() * 0.5 - 0.25;
+        this.color = `hsl(${Math.random() * 360}, 100%, 70%)`; // Random vibrant color
+      }
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+
+        if (this.x < 0 || this.x > particleCanvas.width) this.speedX *= -1;
+        if (this.y < 0 || this.y > particleCanvas.height) this.speedY *= -1;
+
+        // Interaction with mouse
+        if (mouse.x && mouse.y) {
+          const dx = mouse.x - this.x;
+          const dy = mouse.y - this.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          if (distance < mouse.radius + this.size) {
+            const angle = Math.atan2(dy, dx);
+            this.x -= Math.cos(angle) * 2;
+            this.y -= Math.sin(angle) * 2;
+          }
+        }
+      }
+      draw() {
+        particleCtx.fillStyle = this.color;
+        particleCtx.beginPath();
+        particleCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        particleCtx.fill();
+      }
+    }
+
+    function animateParticles() {
+      requestAnimationFrame(animateParticles);
+      particleCtx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
+
+      for (let i = 0; i < particles.length; i++) {
+        particles[i].update();
+        particles[i].draw();
+
+        // Draw lines between close particles
+        for (let j = i; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          if (distance < 80) {
+            particleCtx.strokeStyle = `rgba(56, 189, 248, ${1 - (distance / 80)})`;
+            particleCtx.lineWidth = 0.5;
+            particleCtx.beginPath();
+            particleCtx.moveTo(particles[i].x, particles[i].y);
+            particleCtx.lineTo(particles[j].x, particles[j].y);
+            particleCtx.stroke();
+          }
+        }
+      }
+    }
+
+    /* ===== Sejarah Interactive Timeline ===== */
+    const timelineData = [
+      { year: '2010', title: 'BABYMETAL Terbentuk', desc: 'Proyek idola metal yang unik dimulai dengan Su-metal, Yuimetal, dan Moametal.' },
+      { year: '2014', title: 'Debut Internasional', desc: 'Rilis album debut dan tur dunia pertama, menarik perhatian global.' },
+      { year: '2016', title: 'Album "Metal Resistance"', desc: 'Album kedua yang sukses besar, mencapai tangga lagu di berbagai negara.' },
+      { year: '2018', title: 'Perubahan Formasi', desc: 'Yuimetal hiatus dan kemudian meninggalkan grup, BABYMETAL melanjutkan dengan dua anggota utama.' },
+      { year: '2019', title: 'Album "Metal Galaxy"', desc: 'Album ketiga dengan konsep "Metal Galaxy", menampilkan berbagai kolaborasi.' },
+      { year: '2020', title: '10 BABYMETAL YEARS', desc: 'Perayaan 10 tahun BABYMETAL dengan berbagai proyek dan rilis.' },
+      { year: '2023', title: 'Era "THE OTHER ONE"', desc: 'BABYMETAL kembali dengan formasi baru, memperkenalkan Momometal sebagai anggota resmi.' },
+      { year: '2024', title: 'Era Fans Membentuk Squad Editing', desc: 'Dua individu Yaitu Dari Squad Ini Bukan Orang Lain berambisi membentuk komunitas fans, mencoba nama-nama seperti <i>JBM</i>, <i>XBMC</i>, <i>FBMC</i>, hingga akhirnya resmi menjadi <i>AGBM</i> (A God Babymetal).' },
+      { year: '2025', title: 'Masa Depan Squad', desc: 'Squad terus berkembang, menjadi rumah bagi para foxes untuk nobar, tukar koleksi, dan berkarya bersama.' }
+    ];
+
+    function renderTimeline() {
+      const timelineContainer = $('.timeline');
+      timelineContainer.innerHTML = ''; // Clear existing content
+      timelineData.forEach(item => {
+        const itemDiv = document.createElement('div');
+        itemDiv.classList.add('timeline-item');
+        itemDiv.innerHTML = `
+          <div class="timeline-content">
+            <div class="timeline-year">${item.year}</div>
+            <div class="timeline-title">${item.title}</div>
+            <div class="timeline-desc">${item.desc}</div>
+          </div>
+        `;
+        timelineContainer.appendChild(itemDiv);
+      });
+    }
+
+    let timelineObserver;
+    function initTimelineObserver() {
+      const timelineItems = $$('.timeline-item');
+      if (timelineItems.length === 0) return; // No items to observe
+
+      if (timelineObserver) {
+        timelineObserver.disconnect(); // Disconnect previous observer if exists
+      }
+
+      timelineObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            // observer.unobserve(entry.target); // Optional: unobserve once visible
+          } else {
+            entry.target.classList.remove('visible'); // Make it disappear when out of view
+          }
+        });
+      }, {
+        root: null, // viewport
+        rootMargin: '0px',
+        threshold: 0.2 // Trigger when 20% of item is visible
+      });
+
+      timelineItems.forEach(item => {
+        timelineObserver.observe(item);
+      });
+    }
+
+    /* ===== Intro Logic ===== */
+    const introScreen = $('#intro-screen');
+    const introText1 = $('#intro-text-1');
+    const introText2 = $('#intro-text-2');
+    const introAudio = $('#intro-audio');
+    const mainContent = $('main.wrap');
+
+    function startIntro() {
+      introScreen.style.display = 'flex'; // Show intro screen
+      introAudio.play().catch(e => console.log("Audio play failed:", e));
+
+      setTimeout(() => {
+        introText1.classList.add('show');
+      }, 500); // Show first text after 0.5s
+
+      setTimeout(() => {
+        introText2.classList.add('show');
+      }, 2000); // Show second text after 2s
+
+      setTimeout(() => {
+        introScreen.classList.add('fade-out'); // Start fading out intro screen
+        mainContent.classList.remove('hidden'); // Make main content visible
+        mainContent.classList.add('fade-in'); // Start fading in main content
+      }, 4000); // Start fade out after 4s (adjust as needed based on audio length and desired effect)
+
+      introScreen.addEventListener('transitionend', () => {
+        if (introScreen.classList.contains('fade-out')) {
+          introScreen.style.display = 'none'; // Hide intro screen completely after fade out
+        }
+      });
+    }
+
+    /* ===== Loading Screen Logic ===== */
+    const loadingScreen = $('#loading-screen');
+    const loadingNextBtn = $('#loading-next-btn');
+    const loadingBar = $('#loading-bar');
+    const loadingBarText = $('#loading-bar-text');
+
+    
+// Update loading bar progress & text dynamically (0% → 100%)
+let progress = 0;
+const loadingInterval = setInterval(() => {
+  progress += 1; // 1% step
+  if (progress <= 100) {
+    loadingBar.style.width = `${progress}%`;
+    loadingBarText.textContent = `Loading... ${progress}%`;
+  }
+  if (progress >= 100) {
+    clearInterval(loadingInterval);
+    loadingBarText.textContent = `Complete!`;
+    loadingNextBtn.classList.add('show');
+  }
+}, 30);
+ // Update every 30ms for 3 seconds (100 / 3000ms * 30ms = 1%)
+
+    loadingNextBtn.addEventListener('click', () => {
+      loadingScreen.classList.add('fade-out');
+      loadingScreen.addEventListener('transitionend', () => {
+        loadingScreen.style.display = 'none';
+        startIntro(); // Start the intro after loading screen fades out
+      }, { once: true });
+    });
+
+    /* ===== Settings Sidebar Logic ===== */
+    const settingsBtn = $('#settings-btn');
+    const settingsSidebar = $('#settings-sidebar');
+    const settingsCloseBtn = $('#settings-close');
+    const brandLogo = $('#brand-logo'); // Get the logo element
+
+    function toggleSettingsSidebar() {
+      settingsSidebar.classList.toggle('active');
+      // Toggle transparency of the logo
+      brandLogo.classList.toggle('transparent-logo', settingsSidebar.classList.contains('active'));
+    }
+
+    settingsBtn.addEventListener('click', toggleSettingsSidebar);
+    settingsCloseBtn.addEventListener('click', toggleSettingsSidebar);
+    // Close sidebar if clicking outside
+    settingsSidebar.addEventListener('click', (e) => {
+      if (e.target === settingsSidebar) {
+        toggleSettingsSidebar();
+      }
+    });
+
+  
+/* ===== Pendaftaran: intercept submit to show alert (no external redirect) ===== */
+(function(){
+  const regForm = document.querySelector('#pendaftaran form');
+  if(!regForm) return;
+  // Remove action attribute if present to avoid accidental navigation via JS-less environments
+  regForm.removeAttribute('action');
+  regForm.addEventListener('submit', function(e){
+    e.preventDefault();
+    alert('Halaman Ini Menyatakan:Pesan Berhasil Terkirim!!');
+    try{ regForm.reset(); }catch(_){}
+  }, { once: false });
+})();
+
+  </script>
+</body>
+</html>
